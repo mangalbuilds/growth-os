@@ -447,40 +447,130 @@ def compile_pdf(png_paths):
     print(f"  ✅ PDF Created: {pdf_path} ({pdf_path.stat().st_size / 1024:.1f} KB)")
     return pdf_path
 
+TRACKKARO_INSTA_CAPTION = \"\"\"78% of high-ticket B2B leads ghost you if you don't respond in the first 5 minutes. 📉
+
+Most luxury agencies and clinics spend $10,000+ on Meta ads, only to let their sales reps call leads 4 hours later.
+
+By then? The buyer closed Instagram, went back to work, or already booked a call with a faster competitor.
+
+⚡ The Sub-15s TrackKaro Nervous System:
+1️⃣ Ad Form Submitted ➔ Captured via instant webhook (0.2s)
+2️⃣ Personalized Asset Delivered ➔ WhatsApp brochure & pricing sent (8.4s)
+3️⃣ Sales Rep Alerted ➔ Telegram sound alert + 1-tap call button (12.1s)
+4️⃣ Autonomous CRM Sync ➔ Lead scored and synced to CRM (14.8s)
+
+Stop burning ad spend. Speed to lead is the only moat left in high-ticket sales.
+
+👉 Want to test your team's response time?
+Comment "AUDIT" below or visit trackkaroai.com (link in bio) for a Free 60-Second Speed-to-Lead Audit.
+
+#speedtolead #salesautomation #inboundmarketing #leadconversion #trackkaroai #b2bgrowth #agencygrowth\"\"\"
+
 def send_to_telegram(pdf_path, png_paths):
-    print("\n📲 Sending Carousel PDF & Preview to Telegram...")
+    print("\n📲 Sending TrackKaro Carousel Assets to Telegram...")
     
-    # Send PDF document (Swipeable on Telegram & LinkedIn)
-    boundary = "----WebKitFormBoundaryTelegramPDF"
-    data = []
-    data.append(f"--{boundary}".encode())
-    data.append(b'Content-Disposition: form-data; name="chat_id"\r\n')
-    data.append(TELEGRAM_CHAT_ID.encode())
-    
-    data.append(f"--{boundary}".encode())
-    data.append(b'Content-Disposition: form-data; name="caption"\r\n')
-    caption = "📊 <b>TrackKaro AI • 5-Slide B2B Carousel (LinkedIn Ready PDF)</b>\n\n🎯 <b>Topic:</b> Why 78% of High-Ticket Ad Leads Ghost You in 5 Minutes\n\n👉 <b>LinkedIn Post Hack:</b> Simply upload this PDF directly as a LinkedIn Document post — LinkedIn automatically turns it into an interactive swipeable carousel!"
-    data.append(caption.encode("utf-8"))
-    
-    data.append(f"--{boundary}".encode())
-    data.append(b'Content-Disposition: form-data; name="parse_mode"\r\n')
-    data.append(b"HTML")
-    
-    data.append(f"--{boundary}".encode())
-    data.append(f'Content-Disposition: form-data; name="document"; filename="{pdf_path.name}"\r\nContent-Type: application/pdf\r\n'.encode())
-    with open(pdf_path, "rb") as f:
-        data.append(f.read())
-    data.append(f"--{boundary}--\r\n".encode())
-    
-    req = urllib.request.Request(
-        f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendDocument",
-        data=b"\r\n".join(data),
-        headers={"Content-Type": f"multipart/form-data; boundary={boundary}"},
-        method="POST"
-    )
+    # 1. Send all 5 PNG slides as a native Instagram Album
+    print("  📸 Uploading 5 PNG slides album for Instagram...")
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            print("  ✅ Sent Carousel PDF to phone via Telegram!")
+        boundary_album = "----WebKitFormBoundaryAlbumTrackkaro"
+        album_data = []
+        album_data.append(f"--{boundary_album}".encode())
+        album_data.append(b'Content-Disposition: form-data; name="chat_id"\r\n')
+        album_data.append(TELEGRAM_CHAT_ID.encode())
+        
+        media_items = []
+        for i in range(1, len(png_paths) + 1):
+            media_items.append({
+                "type": "photo",
+                "media": f"attach://slide_{i}",
+                "caption": "📊 <b>TrackKaro AI • Slide 1/5: Why 78% of High-Ticket Leads Ghost You</b>\n\n👉 <i>Swipe right to see all 5 slides. Save to Photos & upload directly to Instagram!</i>" if i == 1 else "",
+                "parse_mode": "HTML"
+            })
+            
+        album_data.append(f"--{boundary_album}".encode())
+        album_data.append(b'Content-Disposition: form-data; name="media"\r\n')
+        album_data.append(json.dumps(media_items).encode("utf-8"))
+        
+        for i, p in enumerate(png_paths, 1):
+            album_data.append(f"--{boundary_album}".encode())
+            album_data.append(f'Content-Disposition: form-data; name="slide_{i}"; filename="{p.name}"\r\nContent-Type: image/png\r\n'.encode())
+            with open(p, "rb") as f:
+                album_data.append(f.read())
+        album_data.append(f"--{boundary_album}--\r\n".encode())
+        
+        req_album = urllib.request.Request(
+            f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMediaGroup",
+            data=b"\r\n".join(album_data),
+            headers={"Content-Type": f"multipart/form-data; boundary={boundary_album}"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req_album, timeout=40) as resp:
+            print("  ✅ Sent 5 PNG slides album to Telegram (Save all to Photos)!")
+    except Exception as e:
+        print(f"  ⚠️ Telegram album error: {e}")
+
+    # 2. Send 1-Tap Copy-Paste Caption & Hashtags
+    print("  📝 Sending formatted Instagram caption & hashtags...")
+    try:
+        msg_text = (
+            "📋 <b>INSTAGRAM POST CAPTION (1-Tap Copy & Paste)</b>\n"
+            "────────────────────────\n\n"
+            f"{TRACKKARO_INSTA_CAPTION}\n\n"
+            "────────────────────────\n"
+            "💡 <b>Instagram Posting Tips:</b>\n"
+            "1. Open Instagram ➔ Tap '+' ➔ Select the 5 saved PNGs (Order 1 to 5).\n"
+            "2. Paste this exact caption.\n"
+            "3. Add Location: 'Dubai, United Arab Emirates' or 'Miami, Florida' for high-ticket agency reach."
+        )
+        payload = json.dumps({
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": msg_text,
+            "parse_mode": "HTML",
+            "disable_web_page_preview": True
+        }).encode("utf-8")
+        req_msg = urllib.request.Request(
+            f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage",
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req_msg, timeout=20) as resp:
+            print("  ✅ Sent 1-tap copy-paste caption to Telegram!")
+    except Exception as e:
+        print(f"  ⚠️ Telegram caption message error: {e}")
+
+    # 3. Send PDF document (Swipeable on Telegram & LinkedIn)
+    print("  📑 Sending LinkedIn swipeable PDF document...")
+    try:
+        boundary_pdf = "----WebKitFormBoundaryTelegramPDF"
+        data_pdf = []
+        data_pdf.append(f"--{boundary_pdf}".encode())
+        data_pdf.append(b'Content-Disposition: form-data; name="chat_id"\r\n')
+        data_pdf.append(TELEGRAM_CHAT_ID.encode())
+        
+        data_pdf.append(f"--{boundary_pdf}".encode())
+        data_pdf.append(b'Content-Disposition: form-data; name="caption"\r\n')
+        caption_pdf = "📑 <b>TrackKaro AI • 5-Slide B2B Swipeable PDF (LinkedIn Ready)</b>\n\n📌 <b>Topic:</b> Why 78% of High-Ticket Ad Leads Ghost You in 5 Minutes\n\n👉 <b>LinkedIn Post:</b> Upload this PDF as a 'Document' post ➔ LinkedIn renders it as an interactive carousel!\n🔗 <b>CTA:</b> trackkaroai.com"
+        data_pdf.append(caption_pdf.encode("utf-8"))
+        
+        data_pdf.append(f"--{boundary_pdf}".encode())
+        data_pdf.append(b'Content-Disposition: form-data; name="parse_mode"\r\n')
+        data_pdf.append(b"HTML")
+        
+        data_pdf.append(f"--{boundary_pdf}".encode())
+        data_pdf.append(f'Content-Disposition: form-data; name="document"; filename="{pdf_path.name}"\r\nContent-Type: application/pdf\r\n'.encode())
+        with open(pdf_path, "rb") as f:
+            data_pdf.append(f.read())
+        data_pdf.append(f"--{boundary_pdf}--\r\n".encode())
+        
+        req_pdf = urllib.request.Request(
+            f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendDocument",
+            data=b"\r\n".join(data_pdf),
+            headers={"Content-Type": f"multipart/form-data; boundary={boundary_pdf}"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req_pdf, timeout=30) as resp:
+            print("  ✅ Sent TrackKaro Carousel PDF to Telegram!")
     except Exception as e:
         print(f"  ⚠️ Telegram PDF error: {e}")
 

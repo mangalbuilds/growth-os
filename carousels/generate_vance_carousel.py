@@ -498,74 +498,131 @@ def compile_pdf(png_paths):
     print(f"  ✅ PDF Created: {pdf_path} ({pdf_path.stat().st_size / 1024:.1f} KB)")
     return pdf_path
 
-def send_to_telegram(pdf_path, png_paths):
-    print("\n📲 Sending Vance Carousel PDF & Slide Preview to Telegram...")
-    
-    # 1. Send Slide 1 Photo Preview
-    boundary = "----WebKitFormBoundaryTelegramPhoto"
-    data = []
-    data.append(f"--{boundary}".encode())
-    data.append(b'Content-Disposition: form-data; name="chat_id"\r\n')
-    data.append(TELEGRAM_CHAT_ID.encode())
-    
-    data.append(f"--{boundary}".encode())
-    data.append(b'Content-Disposition: form-data; name="caption"\r\n')
-    caption = "🎨 <b>VANCE AI • Clean Light-Mode Carousel (Slide 1 Preview)</b>\n\n🎯 <b>Headline:</b> The 23 Buying Triggers That Replace a $4,000/mo Human SDR\n⚡ <b>Theme:</b> Silicon Valley Whitepaper / Memo Aesthetic\n🔗 <b>Domain:</b> usevance.com"
-    data.append(caption.encode("utf-8"))
-    
-    data.append(f"--{boundary}".encode())
-    data.append(b'Content-Disposition: form-data; name="parse_mode"\r\n')
-    data.append(b"HTML")
-    
-    data.append(f"--{boundary}".encode())
-    data.append(f'Content-Disposition: form-data; name="photo"; filename="slide_1.png"\r\nContent-Type: image/png\r\n'.encode())
-    with open(png_paths[0], "rb") as f:
-        data.append(f.read())
-    data.append(f"--{boundary}--\r\n".encode())
-    
-    req_photo = urllib.request.Request(
-        f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto",
-        data=b"\r\n".join(data),
-        headers={"Content-Type": f"multipart/form-data; boundary={boundary}"},
-        method="POST"
-    )
-    try:
-        with urllib.request.urlopen(req_photo, timeout=20) as resp:
-            print("  ✅ Sent Slide 1 preview photo to Telegram!")
-    except Exception as e:
-        print(f"  ⚠️ Telegram photo error: {e}")
+INSTA_CAPTION = \"\"\"Most B2B founders burn $4,000 to $6,000/mo hiring human SDRs to spray 50 generic cold emails a day. 
 
-    # 2. Send PDF document (Swipeable on Telegram & LinkedIn)
-    boundary_pdf = "----WebKitFormBoundaryTelegramPDF"
-    data_pdf = []
-    data_pdf.append(f"--{boundary_pdf}".encode())
-    data_pdf.append(b'Content-Disposition: form-data; name="chat_id"\r\n')
-    data_pdf.append(TELEGRAM_CHAT_ID.encode())
+Result? 0.8% reply rate and a burnt domain in 30 days. 📉
+
+Instead of cold pitching, @usevance.ai runs on 23 Autonomous Intent Buying Triggers:
+
+1️⃣ Hiring Spikes: When a company posts jobs for Growth/Sales roles in the last 7 days.
+2️⃣ Tech Stack Churn: When they drop legacy tools or install Segment/VWO detected via HTTP header audit.
+3️⃣ Capital & Leadership: Seed/Series A rounds or new C-Suite execs appointed within 30 days.
+4️⃣ Reverse-IP De-anonymization: High-intent ICP accounts visiting your pricing page 2+ times.
+
+We don't send cold emails. We send timed reactions on a 15-minute cadence with a 99.2% inbox deliverability SLA. ⚡
+
+👉 Want 20 verified high-intent ICP leads for your business?
+Comment "VANCE" below or DM us @usevance.ai — our autonomous SDR will scan your ICP and deliver 20 leads straight to your inbox.
+
+🔗 Test the live sandbox: usevance.com (link in bio)
+
+#aisdr #b2bsaas #growtharchitecture #coldoutreach #speedtolead #gtmstrategy #salesautomation #usevance\"\"\"
+
+def send_to_telegram(pdf_path, png_paths):
+    print("\n📲 Sending Vance Carousel Assets to Telegram...")
     
-    data_pdf.append(f"--{boundary_pdf}".encode())
-    data_pdf.append(b'Content-Disposition: form-data; name="caption"\r\n')
-    caption_pdf = "📑 <b>Vance AI • 5-Slide B2B Swipeable PDF (LinkedIn & Instagram Ready)</b>\n\n📌 <b>Topic:</b> The 23 Buying Triggers That Replace a $4,000/mo Human SDR\n\n👉 <b>How to Post:</b>\n1. <b>LinkedIn:</b> Upload this PDF as a 'Document' post ➔ LinkedIn renders it as a native swipeable carousel with 3x reach!\n2. <b>Instagram:</b> Slide 1-5 PNGs are saved at <code>growth_engine/carousels/vance_deck/</code>\n🔗 <b>CTA:</b> usevance.com"
-    data_pdf.append(caption_pdf.encode("utf-8"))
-    
-    data_pdf.append(f"--{boundary_pdf}".encode())
-    data_pdf.append(b'Content-Disposition: form-data; name="parse_mode"\r\n')
-    data_pdf.append(b"HTML")
-    
-    data_pdf.append(f"--{boundary_pdf}".encode())
-    data_pdf.append(f'Content-Disposition: form-data; name="document"; filename="{pdf_path.name}"\r\nContent-Type: application/pdf\r\n'.encode())
-    with open(pdf_path, "rb") as f:
-        data_pdf.append(f.read())
-    data_pdf.append(f"--{boundary_pdf}--\r\n".encode())
-    
-    req_pdf = urllib.request.Request(
-        f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendDocument",
-        data=b"\r\n".join(data_pdf),
-        headers={"Content-Type": f"multipart/form-data; boundary={boundary_pdf}"},
-        method="POST"
-    )
+    # 1. Send all 5 PNG slides as a native Instagram Album
+    print("  📸 Uploading 5 PNG slides album for Instagram...")
     try:
+        boundary_album = "----WebKitFormBoundaryAlbumVance"
+        album_data = []
+        album_data.append(f"--{boundary_album}".encode())
+        album_data.append(b'Content-Disposition: form-data; name="chat_id"\r\n')
+        album_data.append(TELEGRAM_CHAT_ID.encode())
+        
+        media_items = []
+        for i in range(1, len(png_paths) + 1):
+            media_items.append({
+                "type": "photo",
+                "media": f"attach://slide_{i}",
+                "caption": "📊 <b>VANCE AI • Slide 1/5: The 23 Buying Triggers That Replace a $4,000/mo Human SDR</b>\n\n👉 <i>Swipe right to see all 5 slides. Save to Photos & upload directly to Instagram!</i>" if i == 1 else "",
+                "parse_mode": "HTML"
+            })
+            
+        album_data.append(f"--{boundary_album}".encode())
+        album_data.append(b'Content-Disposition: form-data; name="media"\r\n')
+        album_data.append(json.dumps(media_items).encode("utf-8"))
+        
+        for i, p in enumerate(png_paths, 1):
+            album_data.append(f"--{boundary_album}".encode())
+            album_data.append(f'Content-Disposition: form-data; name="slide_{i}"; filename="{p.name}"\r\nContent-Type: image/png\r\n'.encode())
+            with open(p, "rb") as f:
+                album_data.append(f.read())
+        album_data.append(f"--{boundary_album}--\r\n".encode())
+        
+        req_album = urllib.request.Request(
+            f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMediaGroup",
+            data=b"\r\n".join(album_data),
+            headers={"Content-Type": f"multipart/form-data; boundary={boundary_album}"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req_album, timeout=40) as resp:
+            print("  ✅ Sent 5 PNG slides album to Telegram (Save all to Photos)!")
+    except Exception as e:
+        print(f"  ⚠️ Telegram album error: {e}")
+
+    # 2. Send 1-Tap Copy-Paste Caption & Hashtags
+    print("  📝 Sending formatted Instagram caption & hashtags...")
+    try:
+        msg_text = (
+            "📋 <b>INSTAGRAM POST CAPTION (1-Tap Copy & Paste)</b>\n"
+            "────────────────────────\n\n"
+            f"{INSTA_CAPTION}\n\n"
+            "────────────────────────\n"
+            "💡 <b>Instagram Posting Tips:</b>\n"
+            "1. Open Instagram ➔ Tap '+' ➔ Select the 5 saved PNGs (Order 1 to 5).\n"
+            "2. Paste this exact caption.\n"
+            "3. Add Location: 'San Francisco, California' or 'New York' for B2B algorithm reach."
+        )
+        payload = json.dumps({
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": msg_text,
+            "parse_mode": "HTML",
+            "disable_web_page_preview": True
+        }).encode("utf-8")
+        req_msg = urllib.request.Request(
+            f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage",
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req_msg, timeout=20) as resp:
+            print("  ✅ Sent 1-tap copy-paste caption to Telegram!")
+    except Exception as e:
+        print(f"  ⚠️ Telegram caption message error: {e}")
+
+    # 3. Send PDF document (Swipeable on Telegram & LinkedIn)
+    print("  📑 Sending LinkedIn swipeable PDF document...")
+    try:
+        boundary_pdf = "----WebKitFormBoundaryTelegramPDF"
+        data_pdf = []
+        data_pdf.append(f"--{boundary_pdf}".encode())
+        data_pdf.append(b'Content-Disposition: form-data; name="chat_id"\r\n')
+        data_pdf.append(TELEGRAM_CHAT_ID.encode())
+        
+        data_pdf.append(f"--{boundary_pdf}".encode())
+        data_pdf.append(b'Content-Disposition: form-data; name="caption"\r\n')
+        caption_pdf = "📑 <b>Vance AI • 5-Slide B2B Swipeable PDF (LinkedIn Ready)</b>\n\n📌 <b>Topic:</b> The 23 Buying Triggers That Replace a $4,000/mo Human SDR\n\n👉 <b>LinkedIn Post:</b> Upload this PDF as a 'Document' post ➔ LinkedIn renders it as an interactive carousel!\n🔗 <b>CTA:</b> usevance.com"
+        data_pdf.append(caption_pdf.encode("utf-8"))
+        
+        data_pdf.append(f"--{boundary_pdf}".encode())
+        data_pdf.append(b'Content-Disposition: form-data; name="parse_mode"\r\n')
+        data_pdf.append(b"HTML")
+        
+        data_pdf.append(f"--{boundary_pdf}".encode())
+        data_pdf.append(f'Content-Disposition: form-data; name="document"; filename="{pdf_path.name}"\r\nContent-Type: application/pdf\r\n'.encode())
+        with open(pdf_path, "rb") as f:
+            data_pdf.append(f.read())
+        data_pdf.append(f"--{boundary_pdf}--\r\n".encode())
+        
+        req_pdf = urllib.request.Request(
+            f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendDocument",
+            data=b"\r\n".join(data_pdf),
+            headers={"Content-Type": f"multipart/form-data; boundary={boundary_pdf}"},
+            method="POST"
+        )
         with urllib.request.urlopen(req_pdf, timeout=30) as resp:
-            print("  ✅ Sent Vance Carousel PDF to phone via Telegram!")
+            print("  ✅ Sent Vance Carousel PDF to Telegram!")
     except Exception as e:
         print(f"  ⚠️ Telegram PDF error: {e}")
 
