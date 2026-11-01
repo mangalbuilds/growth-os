@@ -3,13 +3,18 @@
 Send Vance Carousel 5 PNG Slides Album + Ready-to-Copy Instagram Caption & Hashtags to Telegram.
 """
 
+import os
+import sys
 import json
 import urllib.request
 import urllib.parse
 from pathlib import Path
 
-TOKEN = "8445264349:AAFWHjaQe9Qomf2Zwm7MVV_6NkhRmGWLMjs"
-CHAT_ID = "-5489183481"
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+import env_loader
+
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "-5489183481")
 DIR = Path("/Users/mangal777/Mangal/growth_engine/carousels/vance_deck")
 
 INSTA_CAPTION = """Most B2B founders burn $4,000 to $6,000/mo hiring human SDRs to spray 50 generic cold emails a day. 

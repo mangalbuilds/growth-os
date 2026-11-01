@@ -3,14 +3,19 @@
 Send Vance 23 Buying Triggers 9:16 Video Reel + Instagram Caption to Telegram via curl.
 """
 
+import os
+import sys
 import subprocess
 import html
 import json
 import urllib.request
 from pathlib import Path
 
-TOKEN = "8445264349:AAFWHjaQe9Qomf2Zwm7MVV_6NkhRmGWLMjs"
-CHAT_ID = "-5489183481"
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+import env_loader
+
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "-5489183481")
 VIDEO_PATH = Path("/Users/mangal777/Mangal/growth_engine/reels/vance_23_triggers_9x16.mp4")
 
 REEL_CAPTION = """Cold email is NOT dead. 

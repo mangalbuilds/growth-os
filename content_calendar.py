@@ -16,11 +16,15 @@ import urllib.request
 from datetime import datetime
 from pathlib import Path
 
-TELEGRAM_BOT_TOKEN = "8445264349:AAFWHjaQe9Qomf2Zwm7MVV_6NkhRmGWLMjs"
-TELEGRAM_CHAT_ID = "-5489183481"
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import env_loader
 
-NOCO_URL = "https://crm.trackkaroai.com"
-NOCO_TOKEN = "nc_pat_gPoul6APyQs7Qr77wz3VI6AmaqaXrNg8OipLKIsu"
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "-5489183481")
+
+NOCO_URL = os.getenv("NOCO_URL", "https://crm.trackkaroai.com")
+NOCO_TOKEN = os.getenv("NOCO_TOKEN", "")
 NOCO_CONTENT_TABLE = "m0d70xh1eo1f6uh"
 
 BASE_DIR = Path("/Users/mangal777/Mangal/growth_engine")

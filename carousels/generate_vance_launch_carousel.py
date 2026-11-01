@@ -16,15 +16,19 @@ import urllib.request
 from pathlib import Path
 from PIL import Image
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+import env_loader
+
 CHROME_BIN = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 OUTPUT_DIR = Path("/Users/mangal777/Mangal/growth_engine/carousels/vance_launch_deck")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-TELEGRAM_BOT_TOKEN = "8445264349:AAFWHjaQe9Qomf2Zwm7MVV_6NkhRmGWLMjs"
-TELEGRAM_CHAT_ID = "-5489183481"
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "-5489183481")
 
-NOCO_URL = "https://crm.trackkaroai.com"
-NOCO_TOKEN = "nc_pat_gPoul6APyQs7Qr77wz3VI6AmaqaXrNg8OipLKIsu"
+NOCO_URL = os.getenv("NOCO_URL", "https://crm.trackkaroai.com")
+NOCO_TOKEN = os.getenv("NOCO_TOKEN", "")
 NOCO_CONTENT_TABLE = "m0d70xh1eo1f6uh"
 
 LAUNCH_CAPTION = """Day 1. The B2B outbound playbook is officially broken. 📉

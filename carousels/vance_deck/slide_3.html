@@ -1,0 +1,290 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            width: 1080px;
+            height: 1350px;
+            overflow: hidden;
+            background: #ffffff;
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            color: #0f172a;
+            position: relative;
+        }
+        .canvas {
+            width: 1080px;
+            height: 1350px;
+            padding: 90px 80px 70px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #fafaf9;
+            background-image: radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            padding: 14px 26px;
+            border-radius: 999px;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: #047857;
+            text-transform: uppercase;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #10b981;
+        }
+        .slide-counter {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 26px;
+            font-weight: 800;
+            color: #94a3b8;
+        }
+        .headline {
+            font-size: 64px;
+            font-weight: 900;
+            line-height: 1.15;
+            letter-spacing: -0.04em;
+            color: #0f172a;
+            margin: 30px 0;
+        }
+        .headline span {
+            color: #059669;
+            text-decoration: underline;
+            text-decoration-color: #a7f3d0;
+            text-underline-offset: 8px;
+        }
+        .main-body {
+            font-size: 34px;
+            color: #334155;
+            font-weight: 500;
+            line-height: 1.55;
+            margin-top: 20px;
+        }
+        .main-body b {
+            color: #0f172a;
+            font-weight: 800;
+        }
+        .trigger-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 22px;
+            padding: 24px 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+        }
+        .trigger-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .trigger-cat {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .trigger-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            font-weight: 800;
+            color: #94a3b8;
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 8px;
+        }
+        .trigger-desc {
+            font-size: 24px;
+            color: #475569;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .comp-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .comp-card {
+            border-radius: 28px;
+            padding: 34px 40px;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+        }
+        .comp-card.bad {
+            background: #fff5f5;
+            border-color: #fecdd3;
+        }
+        .comp-card.good {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+            box-shadow: 0 10px 30px rgba(5, 150, 105, 0.08);
+        }
+        .comp-label {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+        .comp-cost {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 58px;
+            font-weight: 900;
+            color: #e11d48;
+            margin-bottom: 6px;
+        }
+        .comp-rate {
+            font-size: 28px;
+            color: #334155;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .comp-sub {
+            font-size: 24px;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 14px;
+        }
+        .comp-badge {
+            display: inline-block;
+            font-size: 20px;
+            font-weight: 800;
+            padding: 6px 18px;
+            border-radius: 10px;
+        }
+        .bad-badge { background: #ffe4e6; color: #be123c; }
+        .good-badge { background: #dcfce7; color: #15803d; }
+        .pipe-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 22px;
+            padding: 24px 30px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+        }
+        .pipe-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 900;
+            color: #059669;
+        }
+        .pipe-info { flex: 1; }
+        .pipe-name {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .pipe-desc {
+            font-size: 22px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        .pipe-tag {
+            font-family: 'JetBrains Mono', monospace;
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: 800;
+        }
+        .cta-btn {
+            display: inline-block;
+            background: #0f172a;
+            color: #ffffff;
+            font-size: 38px;
+            font-weight: 800;
+            padding: 24px 52px;
+            border-radius: 999px;
+            font-family: 'JetBrains Mono', monospace;
+            margin: 34px 0 24px 0;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.2);
+        }
+        .author-tag {
+            font-size: 26px;
+            color: #64748b;
+            font-weight: 700;
+        }
+        .footer-row {
+            border-top: 2px solid #e2e8f0;
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .brand-name {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+        }
+        .footer-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: #059669;
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas">
+        <div class="top-row">
+            <div class="badge"><div class="dot"></div>THE ECONOMIC AUDIT</div>
+            <div class="slide-counter">03 / 05</div>
+        </div>
+        
+        <div>
+            <h1 class="headline">Human SDR vs <span>Vance AI Retainer</span></h1>
+            
+        <div class="comp-grid">
+            <div class="comp-card bad">
+                <div class="comp-label">TRADITIONAL HUMAN SDR</div>
+                <div class="comp-cost">$4,500 / month</div>
+                <div class="comp-rate">50 manual emails/day</div>
+                <div class="comp-sub">40 hrs/wk • Needs 3-month ramp • 0.8% reply rate</div>
+                <div class="comp-badge bad-badge">High burn & domain burn risk</div>
+            </div>
+            <div class="comp-card good">
+                <div class="comp-label" style="color: #047857;">VANCE AUTONOMOUS SDR</div>
+                <div class="comp-cost" style="color: #059669;">$1,500 / month</div>
+                <div class="comp-rate" style="color: #0f172a;">15-Min Intent Cadence</div>
+                <div class="comp-sub">24/7/365 active • 0 ramp-up • 99.2% inbox deliverability</div>
+                <div class="comp-badge good-badge">Scalable B2B pipeline on autopilot</div>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="footer-row">
+            <div class="brand-name">VANCE AI • AUTONOMOUS B2B SDR</div>
+            <div class="footer-text">Inside the 4-step pipeline ➔</div>
+        </div>
+    </div>
+</body>
+</html>

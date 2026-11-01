@@ -20,10 +20,12 @@ import urllib.parse
 from datetime import datetime
 from pathlib import Path
 
+import env_loader
+
 # --- Configuration & Credentials ---
-SERPER_API_KEY = os.environ.get("SERPER_API_KEY", "443d236eeea8922fdde21f7651dc1c30deba0672")
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyCnXFB-ACBVLILC8rdcqhPzqhetdmWCrl0")
-TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "8445264349:AAFWHjaQe9Qomf2Zwm7MVV_6NkhRmGWLMjs")
+SERPER_API_KEY = os.environ.get("SERPER_API_KEY", "")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "-5489183481")
 
 DB_PATH = Path.home() / "Mangal" / "growth_engine" / "growth_vault.db"
@@ -31,7 +33,7 @@ PROJECTS_CONFIG = Path.home() / ".gemini" / "config" / "projects.yaml"
 
 # NocoDB Direct CRM Configuration
 NOCO_URL = os.environ.get("NOCO_URL", "https://crm.trackkaroai.com")
-NOCO_TOKEN = os.environ.get("NOCO_TOKEN", "nc_pat_gPoul6APyQs7Qr77wz3VI6AmaqaXrNg8OipLKIsu")
+NOCO_TOKEN = os.environ.get("NOCO_TOKEN", "")
 NOCO_BASE_ID = "p2xijprsqm6nold"
 NOCO_OPPS_TABLE = "mr4g9hepgu68ut6"
 NOCO_STRATEGIES_TABLE = "mbgtvbu3rf6fycm"

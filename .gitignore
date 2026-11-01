@@ -4,6 +4,10 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Environment Variables
+.env
+*.env
+
 # Database & Runtime Logs (keep repo lightweight)
 *.db
 *.sqlite3
