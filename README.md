@@ -7,7 +7,7 @@
 [![Telegram](https://img.shields.io/badge/Mobile-Telegram%201--Tap-2CA5E0.svg?logo=telegram&logoColor=white)](https://telegram.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> Engineered by **[Mangal Soren](https://github.com/mangalcool222)** (`mangal@trackkaroai.com`)  
+> Engineered by **[Mangal Soren](https://github.com/mangalcool222)** (`mangal@vance.com`)  
 > Target: **AI Product Manager**, **GTM Automation Architect**, and **Growth Engineer**.
 
 **Growth OS** is a production-grade, multi-project distribution infrastructure that bridges the gap between **autonomous web listening** and **high-converting social media distribution**. 
@@ -134,6 +134,6 @@ cd reels/speed_to_lead_reel && npx hyperframes render -o ../trackkaro_speed_to_l
 ## 👤 Author & Architecture Inquiries
 
 **Mangal Soren**  
-- **Email:** `mangal@trackkaroai.com`
+- **Email:** `mangal@vance.com`
 - **GitHub:** [@mangalcool222](https://github.com/mangalcool222)
 - **Role Focus:** AI Product Manager (AI PM), GTM Automation Architect, Growth Engineer.
