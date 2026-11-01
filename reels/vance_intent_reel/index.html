@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg-obsidian: #06080d;
+        --card-bg: rgba(14, 18, 27, 0.75);
+        --card-border: rgba(255, 255, 255, 0.1);
+        --accent-emerald: #10b981;
+        --accent-emerald-glow: rgba(16, 185, 129, 0.4);
+        --accent-cyan: #38bdf8;
+        --accent-rose: #f43f5e;
+        --accent-amber: #f59e0b;
+        --text-muted: #94a3b8;
+        --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--bg-obsidian);
+        font-family: var(--font-sans);
+        color: #ffffff;
+      }
+      #stage {
+        width: 1080px;
+        height: 1920px;
+        position: relative;
+        background: 
+          radial-gradient(circle at 50% 15%, rgba(16, 185, 129, 0.15) 0%, transparent 60%),
+          radial-gradient(circle at 80% 75%, rgba(56, 189, 248, 0.12) 0%, transparent 60%),
+          radial-gradient(circle at 20% 85%, rgba(244, 63, 94, 0.08) 0%, transparent 55%),
+          var(--bg-obsidian);
+        overflow: hidden;
+      }
+
+      /* Subtle grid background texture */
+      .grid-overlay {
+        position: absolute;
+        inset: 0;
+        background-image: 
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+        pointer-events: none;
+      }
+
+      /* Base Full-Frame Scene Container */
+      .scene {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1080px;
+        height: 1920px;
+        padding: 140px 70px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* Persistent Brand Header */
+      .header-bar {
+        position: absolute;
+        top: 70px;
+        left: 70px;
+        right: 70px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 50;
+      }
+      .brand-badge {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: rgba(16, 185, 129, 0.08);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        padding: 12px 24px;
+        border-radius: 999px;
+      }
+      .brand-logo-icon {
+        width: 24px;
+        height: 24px;
+        background: var(--accent-emerald);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 14px;
+        color: #06080d;
+      }
+      .brand-text {
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #ffffff;
+      }
+      .live-pulse {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--font-mono);
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--accent-emerald);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 10px 20px;
+        border-radius: 999px;
+      }
+      .pulse-dot {
+        width: 10px;
+        height: 10px;
+        background: var(--accent-emerald);
+        border-radius: 50%;
+        box-shadow: 0 0 14px var(--accent-emerald);
+        animation: blink 1.2s infinite;
+      }
+      @keyframes blink {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.85); }
+      }
+
+      /* Reusable Components */
+      .badge-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--card-border);
+        backdrop-filter: blur(20px);
+        padding: 16px 32px;
+        border-radius: 999px;
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 35px;
+      }
+      .dot-red { width: 14px; height: 14px; border-radius: 50%; background: var(--accent-rose); box-shadow: 0 0 16px var(--accent-rose); }
+      .dot-green { width: 14px; height: 14px; border-radius: 50%; background: var(--accent-emerald); box-shadow: 0 0 16px var(--accent-emerald); }
+      .dot-cyan { width: 14px; height: 14px; border-radius: 50%; background: var(--accent-cyan); box-shadow: 0 0 16px var(--accent-cyan); }
+
+      /* =========================================
+         SCENE 1: THE BRUTAL HOOK (0s - 3.2s)
+         ========================================= */
+      #scene-1 .hook-main {
+        font-size: 88px;
+        font-weight: 900;
+        line-height: 1.08;
+        letter-spacing: -0.04em;
+        margin-bottom: 40px;
+      }
+      #scene-1 .hook-main span.gradient-red {
+        background: linear-gradient(135deg, #f43f5e 0%, #fb923c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      #scene-1 .hook-card {
+        width: 100%;
+        max-width: 900px;
+        background: rgba(244, 63, 94, 0.06);
+        border: 1px solid rgba(244, 63, 94, 0.25);
+        border-radius: 28px;
+        padding: 44px 40px;
+        margin-top: 30px;
+        text-align: left;
+        backdrop-filter: blur(20px);
+      }
+      .stat-row {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+      .stat-item {
+        text-align: center;
+      }
+      .stat-val {
+        font-size: 64px;
+        font-weight: 900;
+        font-family: var(--font-mono);
+        color: var(--accent-rose);
+        line-height: 1;
+        margin-bottom: 10px;
+      }
+      .stat-lbl {
+        font-size: 20px;
+        color: var(--text-muted);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .hook-subtext {
+        font-size: 28px;
+        color: #cbd5e1;
+        font-weight: 600;
+        line-height: 1.45;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 24px;
+      }
+
+      /* =========================================
+         SCENE 2: THE 23 SIGNALS (3.2s - 6.6s)
+         ========================================= */
+      #scene-2 .s2-title {
+        font-size: 78px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1.12;
+        margin-bottom: 24px;
+      }
+      #scene-2 .s2-title span {
+        background: linear-gradient(135deg, #10b981 0%, #38bdf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      #scene-2 .s2-sub {
+        font-size: 28px;
+        color: var(--text-muted);
+        margin-bottom: 45px;
+        font-weight: 600;
+      }
+      .signals-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+        width: 100%;
+        max-width: 940px;
+      }
+      .signal-box {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 24px;
+        padding: 30px 24px;
+        text-align: left;
+        backdrop-filter: blur(16px);
+        position: relative;
+        overflow: hidden;
+      }
+      .signal-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--accent-emerald);
+      }
+      .signal-box.box-cyan::before { background: var(--accent-cyan); }
+      .signal-box.box-amber::before { background: var(--accent-amber); }
+      .signal-box.box-rose::before { background: var(--accent-rose); }
+      .signal-tag {
+        font-family: var(--font-mono);
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--accent-emerald);
+        letter-spacing: 0.08em;
+        margin-bottom: 10px;
+      }
+      .signal-title {
+        font-size: 26px;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 8px;
+        line-height: 1.25;
+      }
+      .signal-desc {
+        font-size: 18px;
+        color: var(--text-muted);
+        line-height: 1.4;
+      }
+
+      /* =========================================
+         SCENE 3: LIVE PULSE CADENCE (6.6s - 9.8s)
+         ========================================= */
+      #scene-3 .s3-title {
+        font-size: 74px;
+        font-weight: 900;
+        line-height: 1.15;
+        letter-spacing: -0.03em;
+        margin-bottom: 35px;
+      }
+      #scene-3 .s3-title span {
+        background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .live-cockpit-card {
+        width: 100%;
+        max-width: 940px;
+        background: rgba(14, 20, 32, 0.85);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        border-radius: 30px;
+        padding: 44px;
+        text-align: left;
+        backdrop-filter: blur(24px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      }
+      .target-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 24px;
+        margin-bottom: 24px;
+      }
+      .target-name {
+        font-size: 32px;
+        font-weight: 800;
+        color: #ffffff;
+      }
+      .target-location {
+        font-family: var(--font-mono);
+        font-size: 18px;
+        color: var(--accent-cyan);
+        font-weight: 700;
+      }
+      .trigger-pill-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+      .trigger-chip {
+        font-family: var(--font-mono);
+        font-size: 16px;
+        font-weight: 700;
+        padding: 10px 18px;
+        border-radius: 10px;
+        background: rgba(16, 185, 129, 0.12);
+        color: var(--accent-emerald);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+      }
+      .trigger-chip.alt {
+        background: rgba(244, 63, 94, 0.12);
+        color: var(--accent-rose);
+        border-color: rgba(244, 63, 94, 0.25);
+      }
+      .email-preview-box {
+        background: rgba(6, 8, 13, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        padding: 24px;
+      }
+      .email-subject {
+        font-family: var(--font-mono);
+        font-size: 17px;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+      }
+      .email-body {
+        font-size: 22px;
+        color: #f1f5f9;
+        line-height: 1.5;
+        font-weight: 500;
+      }
+      .delivery-sla {
+        margin-top: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: var(--font-mono);
+        font-size: 17px;
+        color: var(--accent-emerald);
+        font-weight: 700;
+      }
+
+      /* =========================================
+         SCENE 4: CTA (9.8s - 12.5s)
+         ========================================= */
+      #scene-4 .cta-title {
+        font-size: 88px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1.08;
+        margin-bottom: 30px;
+      }
+      #scene-4 .cta-title span {
+        background: linear-gradient(135deg, #10b981 0%, #38bdf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      #scene-4 .cta-card {
+        width: 100%;
+        max-width: 900px;
+        background: rgba(16, 185, 129, 0.06);
+        border: 2px solid rgba(16, 185, 129, 0.4);
+        box-shadow: 0 0 80px rgba(16, 185, 129, 0.2);
+        border-radius: 36px;
+        padding: 56px 40px;
+        margin-bottom: 40px;
+      }
+      .cta-headline {
+        font-size: 44px;
+        font-weight: 900;
+        color: #ffffff;
+        margin-bottom: 16px;
+      }
+      .cta-button {
+        display: inline-block;
+        background: #10b981;
+        color: #06080d;
+        font-size: 34px;
+        font-weight: 900;
+        padding: 24px 60px;
+        border-radius: 999px;
+        margin-top: 20px;
+        letter-spacing: -0.01em;
+        box-shadow: 0 10px 40px rgba(16, 185, 129, 0.5);
+      }
+      .cta-url {
+        font-family: var(--font-mono);
+        font-size: 30px;
+        font-weight: 800;
+        color: #ffffff;
+        letter-spacing: 0.05em;
+        margin-top: 30px;
+      }
+      .cta-footer {
+        font-size: 22px;
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="12.5"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div class="grid-overlay"></div>
+
+      <!-- Persistent Top Navigation Bar -->
+      <div class="header-bar">
+        <div class="brand-badge">
+          <div class="brand-logo-icon">V</div>
+          <span class="brand-text">Vance AI SDR</span>
+        </div>
+        <div class="live-pulse">
+          <div class="pulse-dot"></div>
+          23 BUYING SIGNALS ACTIVE
+        </div>
+      </div>
+
+      <!-- =========================================
+           SCENE 1: THE COLD EMAIL TRAP (0.0s - 3.2s)
+           ========================================= -->
+      <div id="scene-1" class="scene">
+        <div class="badge-pill">
+          <div class="dot-red"></div>
+          The Cold Outbound Graveyard
+        </div>
+        <h1 class="hook-main">
+          Blasting 1,000 Generic Emails <br/>
+          <span class="gradient-red">Is Completely Dead.</span>
+        </h1>
+        <div class="hook-card">
+          <div class="stat-row">
+            <div class="stat-item">
+              <div class="stat-val">0.8%</div>
+              <div class="stat-lbl">Avg Reply Rate</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-val">30 Days</div>
+              <div class="stat-lbl">Domain Blacklist</div>
+            </div>
+          </div>
+          <p class="hook-subtext">
+            Traditional tools spam cold lists without context.<br/>
+            <strong>Vance operates in reverse.</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- =========================================
+           SCENE 2: THE 23 BUYING SIGNALS (3.2s - 6.6s)
+           ========================================= -->
+      <div id="scene-2" class="scene">
+        <div class="badge-pill">
+          <div class="dot-green"></div>
+          Zero API Fees • 100% Free HTML Audits
+        </div>
+        <h1 class="s2-title">
+          Vance Monitors <br/>
+          <span>23 Live Buying Triggers</span>
+        </h1>
+        <p class="s2-sub">We never email without a live, verified buying signal.</p>
+        <div class="signals-grid">
+          <div class="signal-box">
+            <div class="signal-tag">#01 PAID ADS TRIGGER</div>
+            <div class="signal-title">Meta & Google Ads</div>
+            <div class="signal-desc">Detects active ad spend. High budget confirmed.</div>
+          </div>
+          <div class="signal-box box-cyan">
+            <div class="signal-tag">#02 SWEET-SPOT SERP</div>
+            <div class="signal-title">Rankings #11 – #30</div>
+            <div class="signal-desc">Targeting companies desperate to break Top 10.</div>
+          </div>
+          <div class="signal-box box-amber">
+            <div class="signal-tag">#03 TECH CHURN</div>
+            <div class="signal-title">Lost Leads Audit</div>
+            <div class="signal-desc">Identifies missing instant booking & CRM leaks.</div>
+          </div>
+          <div class="signal-box box-rose">
+            <div class="signal-tag">#04 GROWTH SPIKE</div>
+            <div class="signal-title">B2B SDR Hiring</div>
+            <div class="signal-desc">Detects sales team expansion & outbound push.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =========================================
+           SCENE 3: LIVE PULSE CADENCE (6.6s - 9.8s)
+           ========================================= -->
+      <div id="scene-3" class="scene">
+        <div class="badge-pill">
+          <div class="dot-cyan"></div>
+          Gemini 1.5 Flash • Bespoke Synthesis
+        </div>
+        <h1 class="s3-title">
+          Live Trigger Detected <br/>
+          <span>On A 15-Min Pulse</span>
+        </h1>
+        <div class="live-cockpit-card">
+          <div class="target-header">
+            <div>
+              <div class="target-name">XYZ Luxury Real Estate</div>
+              <div class="target-location">DUBAI, UAE • FOUNDER OUTBOX</div>
+            </div>
+            <span class="trigger-chip">CONFIRMED BUYING</span>
+          </div>
+          <div class="trigger-pill-row">
+            <span class="trigger-chip">Meta Pixel Active</span>
+            <span class="trigger-chip alt">No Instant Booking</span>
+          </div>
+          <div class="email-preview-box">
+            <div class="email-subject">Subject: noticed your Dubai villa ads (missed lead leak)</div>
+            <div class="email-body">
+              "Saw your new Palm villa campaigns. 78% of ad leads decay after 5 mins without instant WhatsApp dispatch. Set up a sub-15s webhook pipeline for you..."
+            </div>
+          </div>
+          <div class="delivery-sla">
+            <span>⚡ Synthesized in 420ms</span>
+            <span>🛡️ &lt;3% Bounce SLA Guaranteed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- =========================================
+           SCENE 4: CALL TO ACTION (9.8s - 12.5s)
+           ========================================= -->
+      <div id="scene-4" class="scene">
+        <div class="badge-pill">
+          <div class="dot-green"></div>
+          Autonomous B2B Intent SDR
+        </div>
+        <h1 class="cta-title">
+          Stop Spamming. <br/>
+          <span>Start Closing.</span>
+        </h1>
+        <div class="cta-card">
+          <div class="cta-headline">Want 20 Free Verified In-Market Leads?</div>
+          <div class="cta-button">DM "VANCE" ON INSTAGRAM</div>
+          <div class="cta-url">usevance.com</div>
+        </div>
+        <p class="cta-footer">Architected by Mangal Soren • Powered by Growth OS</p>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // ==========================================
+      // SCENE 1 (0.0s - 3.2s): THE TRAP
+      // ==========================================
+      tl.to("#scene-1", { opacity: 1, duration: 0.3 }, 0);
+      tl.from("#scene-1 .badge-pill", { y: -20, opacity: 0, duration: 0.4, ease: "power2.out" }, 0.1);
+      tl.from("#scene-1 .hook-main", { scale: 0.9, opacity: 0, duration: 0.6, ease: "power4.out" }, 0.2);
+      tl.from("#scene-1 .hook-card", { y: 60, opacity: 0, duration: 0.6, ease: "back.out(1.2)" }, 0.5);
+      tl.from("#scene-1 .stat-item", { scale: 0.8, opacity: 0, stagger: 0.15, duration: 0.4 }, 0.8);
+      // Exit Scene 1
+      tl.to("#scene-1", { y: -80, opacity: 0, duration: 0.4, ease: "power3.in" }, 2.8);
+
+      // ==========================================
+      // SCENE 2 (3.2s - 6.6s): THE 23 SIGNALS
+      // ==========================================
+      tl.to("#scene-2", { opacity: 1, duration: 0.3 }, 3.2);
+      tl.from("#scene-2 .badge-pill", { y: -20, opacity: 0, duration: 0.4, ease: "power2.out" }, 3.3);
+      tl.from("#scene-2 .s2-title", { scale: 0.92, opacity: 0, duration: 0.5, ease: "power3.out" }, 3.4);
+      tl.from("#scene-2 .s2-sub", { opacity: 0, duration: 0.4 }, 3.6);
+      tl.from("#scene-2 .signal-box", { 
+        y: 40, 
+        opacity: 0, 
+        stagger: 0.12, 
+        duration: 0.5, 
+        ease: "back.out(1.3)" 
+      }, 3.8);
+      // Exit Scene 2
+      tl.to("#scene-2", { x: -80, opacity: 0, duration: 0.4, ease: "power3.in" }, 6.2);
+
+      // ==========================================
+      // SCENE 3 (6.6s - 9.8s): LIVE COCKPIT
+      // ==========================================
+      tl.to("#scene-3", { opacity: 1, duration: 0.3 }, 6.6);
+      tl.from("#scene-3 .badge-pill", { y: -20, opacity: 0, duration: 0.4, ease: "power2.out" }, 6.7);
+      tl.from("#scene-3 .s3-title", { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" }, 6.8);
+      tl.from("#scene-3 .live-cockpit-card", { scale: 0.88, opacity: 0, duration: 0.6, ease: "elastic.out(1, 0.9)" }, 7.0);
+      tl.from("#scene-3 .trigger-chip", { scale: 0.8, opacity: 0, stagger: 0.1, duration: 0.3 }, 7.4);
+      tl.from("#scene-3 .email-preview-box", { y: 20, opacity: 0, duration: 0.4 }, 7.6);
+      // Exit Scene 3
+      tl.to("#scene-3", { scale: 1.05, opacity: 0, duration: 0.4, ease: "power3.in" }, 9.4);
+
+      // ==========================================
+      // SCENE 4 (9.8s - 12.5s): CALL TO ACTION
+      // ==========================================
+      tl.to("#scene-4", { opacity: 1, duration: 0.4 }, 9.8);
+      tl.from("#scene-4 .cta-title", { y: 30, opacity: 0, duration: 0.5, ease: "power4.out" }, 9.9);
+      tl.from("#scene-4 .cta-card", { scale: 0.85, opacity: 0, duration: 0.6, ease: "back.out(1.4)" }, 10.1);
+      tl.from("#scene-4 .cta-button", { scale: 0.9, opacity: 0, duration: 0.4, ease: "elastic.out(1, 0.8)" }, 10.4);
+      tl.from("#scene-4 .cta-footer", { opacity: 0, duration: 0.4 }, 10.7);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
