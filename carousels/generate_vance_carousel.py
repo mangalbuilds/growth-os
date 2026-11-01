@@ -117,7 +117,7 @@ SLIDES_DATA = [
         "headline": "Want 20 Verified ICP Leads <span>Qualified on Intent?</span>",
         "body": "Tell me your B2B ICP (Job Title, Industry, Target Tech Stack).<br><br>Vance will run an autonomous intent scan and deliver <b>20 verified high-intent leads with personalized hooks</b> directly to your inbox.<br><br>👉 <b>DM 'VANCE'</b> or test the engine live:",
         "cta_button": "usevance.com",
-        "author": "Mangal Soren • Founder & AI GTM Architect",
+        "author": "Vance AI • Autonomous B2B Intent Engine (@usevance.ai)",
         "footer": "Save this post for your outbound playbook"
     }
 ]
