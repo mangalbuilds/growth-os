@@ -1,0 +1,152 @@
+# 🧠 Mangal Soren — Multi-Project Distribution & Growth Master Registry
+# Used by: reddit-automation, hyperframes, n8n, and Antigravity Agent
+
+projects:
+  trackkaro:
+    name: "TrackKaro AI"
+    category: "B2B Speed-to-Lead & Inbound Automation"
+    url: "https://trackkaroai.com"
+    one_liner: "Connects Meta/Google ad form submissions to human sales reps within 15 seconds via instant WhatsApp asset delivery, Telegram sound alerts, and CRM sync."
+    icp: "High-ticket Agency Owners, Luxury Real Estate Brokers (Dubai/Global), Aesthetic Clinics, Solar Companies."
+    target_subreddits:
+      - "r/sales"
+      - "r/SaaS"
+      - "r/agency"
+      - "r/FacebookAds"
+      - "r/marketing"
+      - "r/realestateinvesting"
+    trigger_keywords:
+      - "speed to lead"
+      - "leads not picking up"
+      - "facebook leads cold"
+      - "lead decay meta ads"
+      - "inbound response time"
+    disclosure: "Full disclosure, I built TrackKaro AI to solve this exact pipeline decay, but you can also hack a basic version via n8n + Twilio."
+
+  vance:
+    name: "Vance AI SDR"
+    category: "Autonomous B2B Intent Outbound SDR (23 Buying Triggers)"
+    url: "https://vance.trackkaroai.com"
+    one_liner: "Autonomous B2B Intent Outbound SDR detecting 23 buying triggers, scouting verified decision-makers, and synthesizing bespoke 1-to-1 pitches on autopilot."
+    offer: "$1,500–$2,500/mo Autonomous AI SDR Retainer for B2B SaaS & Dev Agencies"
+    icp: "B2B SaaS Founders, Software Development Agencies, Growth Marketing Agencies, High-Ticket B2B Consultants."
+    target_subreddits:
+      - "r/sales"
+      - "r/coldemail"
+      - "r/leadgeneration"
+      - "r/Emailmarketing"
+      - "r/SaaS"
+      - "r/agency"
+    trigger_keywords:
+      - "hiring an SDR vs AI"
+      - "cold email response rate"
+      - "how to get agency clients"
+      - "apollo vs clay for outbound"
+      - "b2b lead generation retainer"
+      - "cold outbound take so much time"
+      - "buying triggers intent data"
+    disclosure: "Full disclosure, I built and run Vance AI SDR to automate our agency prospecting and outbound pipeline."
+
+  jarvis:
+    name: "Vance AI SDR (Jarvis)"
+    category: "Autonomous B2B Outbound Engine"
+    url: "https://vance.trackkaroai.com"
+    one_liner: "Autonomous B2B Intent Outbound SDR (Vance) detecting 23 buying triggers."
+    offer: "$1,500–$2,500/mo Autonomous AI SDR Retainer for B2B SaaS & Dev Agencies"
+    icp: "B2B SaaS Founders, Software Development Agencies, Growth Marketing Agencies."
+    target_subreddits:
+      - "r/sales"
+      - "r/coldemail"
+    trigger_keywords:
+      - "cold email response rate"
+    disclosure: "Full disclosure, I built and run Vance AI SDR."
+
+  creatigen:
+    name: "Creatigen / HQ"
+    category: "AI Video Repurposing (OpusClip Alternative)"
+    one_liner: "Autonomous AI engine that turns 1-hour podcasts and YouTube videos into 10 viral 9:16 shorts with bouncy dynamic captions and virality scoring."
+    icp: "YouTubers, Podcasters, Video Editors, Media Agencies, Social Media Managers."
+    target_subreddits:
+      - "r/youtubers"
+      - "r/podcasting"
+      - "r/VideoEditing"
+      - "r/socialmediamarketing"
+      - "r/ContentCreation"
+      - "r/CreatorServices"
+    trigger_keywords:
+      - "opus clip alternative"
+      - "turn youtube video into shorts"
+      - "auto caption generator"
+      - "repurpose long form content"
+      - "editing shorts takes too long"
+    disclosure: "Full disclosure, I built Creatigen as an autonomous video repurposing pipeline to cut down 10 hours of manual short editing."
+
+  kanjo:
+    name: "Kanjo"
+    category: "Mood & Emotion Discovery Engine"
+    one_liner: "Emotion-based recommendation and discovery engine that curates audio, activities, and experiences based on your current psychological state."
+    icp: "Everyday mobile users, music lovers, journaling enthusiasts, mindful tech early adopters."
+    target_subreddits:
+      - "r/SideProject"
+      - "r/apps"
+      - "r/productivity"
+      - "r/music"
+      - "r/mentalhealth"
+    trigger_keywords:
+      - "mood tracker app"
+      - "music based on feeling"
+      - "burnout app"
+      - "new apps to try"
+    disclosure: "Full disclosure, I'm the indie developer behind Kanjo—built it because I hated rigid questionnaire-style mood trackers."
+
+  job_hunter:
+    name: "Autonomous Job Hunter Copilot"
+    category: "AI Job Hunt & ATS Qualification"
+    one_liner: "Autonomous pipeline combining Serper API, Google Search queries, and Gemini 1.5 Flash scoring to qualify tech jobs and send real-time Telegram push alerts."
+    icp: "Job seekers, Software Engineers, AI PMs, Product Designers looking for startup roles."
+    target_subreddits:
+      - "r/jobs"
+      - "r/remotework"
+      - "r/cscareerquestions"
+      - "r/recruitinghell"
+      - "r/careerguidance"
+    trigger_keywords:
+      - "applied to 500 jobs no response"
+      - "job scraping automation"
+      - "how to find startup jobs fast"
+      - "ATS resume filter"
+    disclosure: "Full disclosure, I built an open-source copilot using Gemini + Google Sheets + Telegram to avoid mindlessly scrolling job boards."
+
+  ai_video_wan:
+    name: "Wan2.1 AI Video Engine"
+    category: "Open Source AI Video Generation"
+    one_liner: "State-of-the-art open-source 1.3B/14B text-to-video generation running on consumer hardware and Colab T4 GPUs with 4-bit quantization."
+    icp: "AI Researchers, Machine Learning Engineers, Open Source Contributors, VFX Artists."
+    target_subreddits:
+      - "r/StableDiffusion"
+      - "r/LocalLLaMA"
+      - "r/ArtificialInteligence"
+      - "r/machinelearning"
+    trigger_keywords:
+      - "open source video generator"
+      - "wan2.1 colab t4"
+      - "sora alternative self hosted"
+      - "video diffusion oom"
+    disclosure: "I maintain an optimized setup for Wan2.1 to prevent Colab T4 RAM/VRAM crashes."
+
+  ughar:
+    name: "UGhar"
+    category: "Zero-Broker Rental & 60s Dispatch"
+    one_liner: "Instant 60-second dispatch connecting verified tenants directly to property owners without middleman broker fees."
+    icp: "Tenants and Landlords in major metropolitan tech hubs (Bangalore, Mumbai, Delhi-NCR)."
+    target_subreddits:
+      - "r/bangalore"
+      - "r/mumbai"
+      - "r/delhi"
+      - "r/india"
+    trigger_keywords:
+      - "broker charging 2 months deposit"
+      - "flat hunting bangalore"
+      - "owner without broker"
+      - "rent house without broker"
+    disclosure: "Full disclosure, I built UGhar to fix the broken 60s tenant dispatch problem in Indian metros."

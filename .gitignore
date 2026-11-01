@@ -1,0 +1,20 @@
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Database & Runtime Logs (keep repo lightweight)
+*.db
+*.sqlite3
+*.log
+hunter_daemon.log
+nocodb_growth_vault_import.csv
+
+# Node & HyperFrames Cache
+node_modules/
+.hyperframes/
+package-lock.json
+
+# Temp renders (keep final MP4s / PDFs in release or tracked if desired)
+reels/speed_to_lead_reel/test_reel.mp4

@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800;900&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg-obsidian: #06080d;
+        --accent-emerald: #10b981;
+        --accent-rose: #f43f5e;
+        --accent-cyan: #06b6d4;
+        --accent-amber: #f59e0b;
+        --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--bg-obsidian);
+        font-family: var(--font-sans);
+        color: #ffffff;
+      }
+      #stage {
+        width: 1080px;
+        height: 1920px;
+        position: relative;
+        background: radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.12) 0%, transparent 65%),
+                    radial-gradient(circle at 50% 70%, rgba(6, 182, 212, 0.1) 0%, transparent 60%),
+                    var(--bg-obsidian);
+        overflow: hidden;
+      }
+
+      /* Base Full-Frame Scene Container */
+      .scene {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1080px;
+        height: 1920px;
+        padding: 120px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* Global Header Pill (Persistent or Dynamic) */
+      .badge-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(20px);
+        padding: 18px 36px;
+        border-radius: 999px;
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 40px;
+      }
+      .badge-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+      }
+      .dot-red { background: var(--accent-rose); box-shadow: 0 0 20px var(--accent-rose); }
+      .dot-green { background: var(--accent-emerald); box-shadow: 0 0 20px var(--accent-emerald); }
+      .dot-cyan { background: var(--accent-cyan); box-shadow: 0 0 20px var(--accent-cyan); }
+
+      /* =========================================
+         SCENE 1: THE BRUTAL HOOK (0s - 2.8s)
+         ========================================= */
+      #scene-1 .hook-eyebrow {
+        font-size: 36px;
+        font-weight: 800;
+        color: var(--accent-rose);
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        margin-bottom: 30px;
+      }
+      #scene-1 .hook-main {
+        font-size: 96px;
+        font-weight: 900;
+        line-height: 1.08;
+        letter-spacing: -0.04em;
+        margin-bottom: 50px;
+      }
+      #scene-1 .hook-main span {
+        background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      #scene-1 .hook-sub {
+        font-size: 40px;
+        color: #94a3b8;
+        font-weight: 600;
+        line-height: 1.4;
+        max-width: 850px;
+      }
+
+      /* =========================================
+         SCENE 2: THE PROBLEM (2.8s - 5.8s)
+         ========================================= */
+      .card-box {
+        width: 100%;
+        max-width: 920px;
+        border-radius: 44px;
+        padding: 60px;
+        background: rgba(18, 22, 34, 0.85);
+        backdrop-filter: blur(30px);
+        border: 2px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+        text-align: left;
+      }
+      .card-box.problem {
+        border-color: rgba(244, 63, 94, 0.4);
+        background: linear-gradient(180deg, rgba(244, 63, 94, 0.08) 0%, rgba(18, 22, 34, 0.95) 100%);
+      }
+      .card-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 36px;
+      }
+      .card-title {
+        font-size: 32px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--accent-rose);
+      }
+      .status-pill {
+        font-family: var(--font-mono);
+        font-size: 26px;
+        font-weight: 800;
+        padding: 10px 24px;
+        border-radius: 14px;
+      }
+      .pill-red { background: rgba(244, 63, 94, 0.18); color: #fb7185; }
+      .pill-green { background: rgba(16, 185, 129, 0.18); color: #34d399; }
+
+      .big-timer {
+        font-family: var(--font-mono);
+        font-size: 110px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        margin-bottom: 24px;
+      }
+      .card-desc {
+        font-size: 34px;
+        color: #94a3b8;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+
+      /* =========================================
+         SCENE 3: THE SOLUTION (5.8s - 8.8s)
+         ========================================= */
+      .card-box.solution {
+        border-color: rgba(16, 185, 129, 0.5);
+        background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, rgba(18, 22, 34, 0.95) 100%);
+        box-shadow: 0 0 100px rgba(16, 185, 129, 0.15);
+      }
+      .solution .card-title { color: var(--accent-emerald); }
+      .solution .big-timer {
+        background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .feature-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        width: 100%;
+        max-width: 920px;
+        margin-top: 36px;
+      }
+      .feature-item {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 28px 24px;
+        font-size: 28px;
+        font-weight: 700;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      /* =========================================
+         SCENE 4: CALL TO ACTION (8.8s - 11.0s)
+         ========================================= */
+      #scene-4 .cta-title {
+        font-size: 88px;
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        margin-bottom: 30px;
+      }
+      #scene-4 .cta-title span {
+        background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      #scene-4 .cta-button {
+        background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+        color: #06080d;
+        font-size: 44px;
+        font-weight: 900;
+        padding: 32px 70px;
+        border-radius: 999px;
+        font-family: var(--font-mono);
+        letter-spacing: -0.02em;
+        box-shadow: 0 0 80px rgba(16, 185, 129, 0.5);
+        margin-top: 40px;
+      }
+      #scene-4 .cta-sub {
+        font-size: 32px;
+        color: #94a3b8;
+        font-weight: 600;
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="11"
+      data-width="1080"
+      data-height="1920"
+    >
+      <!-- SCENE 1: HOOK (0s - 2.8s) -->
+      <div id="scene-1" class="scene">
+        <div class="badge-pill">
+          <div class="badge-dot dot-red"></div>
+          Lead Decay Reality Check
+        </div>
+        <div class="hook-eyebrow">⚠️ Crucial B2B Sales Data</div>
+        <h1 class="hook-main">78% of Ad Leads Die in <span>5 Minutes</span></h1>
+        <p class="hook-sub">If you don't respond in seconds, your competitor takes the deal.</p>
+      </div>
+
+      <!-- SCENE 2: THE PROBLEM (2.8s - 5.8s) -->
+      <div id="scene-2" class="scene">
+        <div class="badge-pill">
+          <div class="badge-dot dot-red"></div>
+          The Traditional Way
+        </div>
+        <div class="card-box problem">
+          <div class="card-meta">
+            <span class="card-title">Manual Sales Rep</span>
+            <span class="status-pill pill-red">❌ LEAD GHOSTED</span>
+          </div>
+          <div class="big-timer">04h 12m</div>
+          <p class="card-desc">Average time for an agency rep to open Google Sheets & call the prospect.</p>
+        </div>
+      </div>
+
+      <!-- SCENE 3: THE SOLUTION (5.8s - 8.8s) -->
+      <div id="scene-3" class="scene">
+        <div class="badge-pill">
+          <div class="badge-dot dot-green"></div>
+          TrackKaro Autonomous OS
+        </div>
+        <div class="card-box solution">
+          <div class="card-meta">
+            <span class="card-title">Instant AI Dispatch</span>
+            <span class="status-pill pill-green">⚡ SPEED TO LEAD</span>
+          </div>
+          <div class="big-timer">14.8s</div>
+          <p class="card-desc">WhatsApp brochure sent + Sales team instantly alerted on Telegram.</p>
+        </div>
+
+        <div class="feature-list">
+          <div class="feature-item">📲 WhatsApp Asset</div>
+          <div class="feature-item">🔔 Telegram Rep Alert</div>
+          <div class="feature-item">📊 NocoDB Live CRM</div>
+          <div class="feature-item">🎯 0% Lead Dropoff</div>
+        </div>
+      </div>
+
+      <!-- SCENE 4: CALL TO ACTION (8.8s - 11.0s) -->
+      <div id="scene-4" class="scene">
+        <div class="badge-pill">
+          <div class="badge-dot dot-cyan"></div>
+          TrackKaro AI
+        </div>
+        <h1 class="cta-title">Kill Lead Decay <span>Forever</span></h1>
+        <div class="cta-button">trackkaroai.com</div>
+        <p class="cta-sub">Autonomous Inbound & SDR Nervous System</p>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // ==========================================
+      // SCENE 1 (0.0s - 2.8s)
+      // ==========================================
+      tl.to("#scene-1", { opacity: 1, duration: 0.3 }, 0);
+      tl.from("#scene-1 .hook-main", { scale: 0.88, opacity: 0, duration: 0.6, ease: "power4.out" }, 0.1);
+      tl.from("#scene-1 .hook-sub", { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" }, 0.4);
+      // Exit Scene 1
+      tl.to("#scene-1", { y: -80, opacity: 0, duration: 0.4, ease: "power3.in" }, 2.5);
+
+      // ==========================================
+      // SCENE 2 (2.8s - 5.8s)
+      // ==========================================
+      tl.to("#scene-2", { opacity: 1, duration: 0.3 }, 2.8);
+      tl.from("#scene-2 .card-box", { scale: 0.9, opacity: 0, y: 80, duration: 0.6, ease: "back.out(1.2)" }, 2.9);
+      // Exit Scene 2
+      tl.to("#scene-2", { x: -100, opacity: 0, duration: 0.4, ease: "power3.in" }, 5.5);
+
+      // ==========================================
+      // SCENE 3 (5.8s - 8.8s)
+      // ==========================================
+      tl.to("#scene-3", { opacity: 1, duration: 0.3 }, 5.8);
+      tl.from("#scene-3 .card-box", { scale: 0.88, opacity: 0, duration: 0.6, ease: "elastic.out(1, 0.85)" }, 5.9);
+      tl.from("#scene-3 .feature-item", { y: 30, opacity: 0, stagger: 0.1, duration: 0.4, ease: "power2.out" }, 6.5);
+      // Exit Scene 3
+      tl.to("#scene-3", { scale: 1.05, opacity: 0, duration: 0.4, ease: "power3.in" }, 8.5);
+
+      // ==========================================
+      // SCENE 4 (8.8s - 11.0s)
+      // ==========================================
+      tl.to("#scene-4", { opacity: 1, duration: 0.4 }, 8.8);
+      tl.from("#scene-4 .cta-title", { y: 40, opacity: 0, duration: 0.6, ease: "power4.out" }, 8.9);
+      tl.from("#scene-4 .cta-button", { scale: 0.8, opacity: 0, duration: 0.5, ease: "back.out(1.5)" }, 9.2);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
