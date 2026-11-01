@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="vGradLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <filter id="lightGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="#ffffff"/>
+  <rect x="32" y="32" width="960" height="960" rx="220" fill="#fafaf9" stroke="#e2e8f0" stroke-width="8"/>
+
+  <!-- Geometric V -->
+  <path d="M 280 270 L 410 270 L 512 670 L 440 670 Z" fill="url(#vGradLight)"/>
+  <path d="M 744 270 L 614 270 L 512 670 L 584 670 Z" fill="url(#vGradLight)"/>
+
+  <!-- Glowing Emerald Intent Node -->
+  <circle cx="512" cy="630" r="46" fill="#10b981" filter="url(#lightGlow)"/>
+  <circle cx="512" cy="630" r="22" fill="#ffffff"/>
+</svg>
