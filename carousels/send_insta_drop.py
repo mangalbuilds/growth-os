@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import env_loader
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
-CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "-5489183481")
+CHAT_ID = os.getenv("VANCE_TELEGRAM_CHAT_ID", "-1003882353811")  # Dedicated Vance Supergroup
 DIR = Path("/Users/mangal777/Mangal/growth_engine/carousels/vance_deck")
 
 INSTA_CAPTION = """Most B2B founders burn $4,000 to $6,000/mo hiring human SDRs to spray 50 generic cold emails a day. 

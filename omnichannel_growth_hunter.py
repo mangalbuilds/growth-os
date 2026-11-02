@@ -367,10 +367,17 @@ def main():
         if p_key not in projects:
             print(f"❌ Unknown project '{p_key}'. Available: {list(projects.keys())}")
             sys.exit(1)
-        run_hunter_for_project(p_key, projects[p_key])
+        p_data = projects[p_key]
+        if not p_data.get("enabled", True):
+            print(f"⚠️ Project '{p_key}' ({p_data.get('name')}) is currently disabled in projects.yaml. Skipping.")
+            return
+        run_hunter_for_project(p_key, p_data)
     elif args.all:
         total = 0
         for p_key, p_data in projects.items():
+            if not p_data.get("enabled", True):
+                print(f"  ⏭️ Skipping disabled project: {p_key} ({p_data.get('name')})")
+                continue
             total += run_hunter_for_project(p_key, p_data)
         print(f"\n🎉 Omnichannel Scan Complete! Dispatched {total} alerts to Telegram.")
     else:

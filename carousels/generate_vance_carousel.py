@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-🎨 Programmatic High-Ticket B2B Carousel Generator — Vance AI SDR (Clean Light Silicon Valley Mode)
+🎨 Programmatic High-Ticket B2B Carousel Generator — Vance AI SDR Post #3 (Obsidian Dark + Neon Emerald Cybernetic Aesthetic)
 Generates:
-1. 1080x1350 High-Res PNG Slides (Light Theme: Clean Apple/Linear/Stripe Memo Aesthetic)
+1. 1080x1350 High-Res Dark PNG Slides (Obsidian Dark Theme matching Vance Feed Aesthetic)
 2. Interactive Swipeable PDF Document (for LinkedIn Carousel Posts & Telegram)
-3. Direct Telegram Push to Phone
+3. Direct Telegram Push to Phone (5 PNG Album + 1-Tap Copy-Paste Caption)
 4. Auto-logging into NocoDB Content Assets Table under 'vance'
 """
 
@@ -37,13 +37,13 @@ SLIDES_DATA = [
         "badge": "AUTONOMOUS OUTBOUND BLUEPRINT",
         "badge_color": "emerald",
         "headline": "The 23 Buying Triggers That Replace a <span>$4,000/mo Human SDR</span>",
-        "body": "Most B2B companies burn $4,000 to $6,000 every month hiring SDRs who manually spray 50 generic templates a day with a 0.8% reply rate.<br><br>Here is the exact <b>23-trigger intent architecture</b> powering <b>Vance AI</b> to book high-ticket discovery calls on autopilot.",
+        "body": "Most B2B companies burn $4,000 to $6,000 every month hiring SDRs who manually spray 50 generic templates a day with a 0.8% reply rate.<br><br>Here is the exact <b>23-trigger intent architecture</b> powering <b>Vance AI</b> (@usevance.ai) to book high-ticket discovery calls on autopilot.",
         "footer": "Swipe to see the 23 triggers ➔"
     },
     {
         "num": 2,
         "badge": "INTENT TRIGGER MATRIX",
-        "badge_color": "indigo",
+        "badge_color": "cyan",
         "headline": "We don't send cold emails. We send <span>timed reactions.</span>",
         "content_type": "triggers",
         "triggers": [
@@ -51,25 +51,33 @@ SLIDES_DATA = [
                 "cat": "HIRING SURGES",
                 "code": "TRIGGERS 01 - 06",
                 "desc": "Target company posts job for Head of Growth, SDR, or Sales Director in last 7 days.",
-                "color": "#059669"
+                "color": "#10b981",
+                "border": "rgba(16, 185, 129, 0.4)",
+                "bg": "rgba(16, 185, 129, 0.08)"
             },
             {
                 "cat": "TECH STACK CHURN",
                 "code": "TRIGGERS 07 - 12",
-                "desc": "Domain installs Segment, switches CRM, or starts testing tools detected via HTTP header audit.",
-                "color": "#4f46e5"
+                "desc": "Domain installs Segment, switches CRM, or drops booking widgets detected via header audit.",
+                "color": "#38bdf8",
+                "border": "rgba(56, 189, 248, 0.4)",
+                "bg": "rgba(56, 189, 248, 0.08)"
             },
             {
                 "cat": "CAPITAL & LEADERSHIP",
                 "code": "TRIGGERS 13 - 18",
                 "desc": "Secured Seed/Series A round, or new VP/C-Suite executive appointed within 30 days.",
-                "color": "#d97706"
+                "color": "#f59e0b",
+                "border": "rgba(245, 158, 11, 0.4)",
+                "bg": "rgba(245, 158, 11, 0.08)"
             },
             {
                 "cat": "WEBSITE DE-ANONYMIZATION",
                 "code": "TRIGGERS 19 - 23",
                 "desc": "Target ICP visits pricing or product case study page 2+ times via reverse IP lookup.",
-                "color": "#e11d48"
+                "color": "#f43f5e",
+                "border": "rgba(244, 63, 94, 0.4)",
+                "bg": "rgba(244, 63, 94, 0.08)"
             }
         ],
         "footer": "The brutal economics comparison ➔"
@@ -77,7 +85,7 @@ SLIDES_DATA = [
     {
         "num": 3,
         "badge": "THE ECONOMIC AUDIT",
-        "badge_color": "emerald",
+        "badge_color": "rose",
         "headline": "Human SDR vs <span>Vance AI Retainer</span>",
         "content_type": "comparison",
         "human": {
@@ -105,7 +113,7 @@ SLIDES_DATA = [
         "steps": [
             {"step": "01", "name": "Signal Ingestion", "desc": "Monitors 23 live intent streams every 15 minutes.", "tag": "15m Cycle"},
             {"step": "02", "name": "Waterfall Enrichment", "desc": "Extracts verified direct mobile and email via Apollo & Hunter.", "tag": "100% Valid"},
-            {"step": "03", "name": "Context Angle Synthesis", "desc": "Gemini 1.5 Flash writes custom 60-word pitch tied to trigger.", "tag": "No Templates"},
+            {"step": "03", "name": "Context Angle Synthesis", "desc": "Gemini 1.5 Flash writes custom 50-word pitch tied to trigger.", "tag": "No Templates"},
             {"step": "04", "name": "Inbox Cadence Dispatch", "desc": "Sent from warm secondary domains directly to primary inbox.", "tag": "99.2% SLA"}
         ],
         "footer": "Get your first 20 leads ➔"
@@ -115,18 +123,19 @@ SLIDES_DATA = [
         "badge": "START QUALIFYING",
         "badge_color": "emerald",
         "headline": "Want 20 Verified ICP Leads <span>Qualified on Intent?</span>",
-        "body": "Tell me your B2B ICP (Job Title, Industry, Target Tech Stack).<br><br>Vance will run an autonomous intent scan and deliver <b>20 verified high-intent leads with personalized hooks</b> directly to your inbox.<br><br>👉 <b>DM 'VANCE'</b> or test the engine live:",
+        "body": "Tell us your B2B ICP (Job Title, Industry, Target Tech Stack).<br><br>Vance will run an autonomous intent scan and deliver <b>20 verified high-intent leads with personalized hooks</b> directly to your inbox for free.<br><br>👉 <b>DM 'VANCE'</b> to @usevance.ai or test the engine live:",
         "cta_button": "usevance.com",
         "author": "Vance AI • Autonomous B2B Intent Engine (@usevance.ai)",
-        "footer": "Save this post for your outbound playbook"
+        "footer": "Save this post for your 2026 outbound playbook"
     }
 ]
 
 def generate_html_slide(slide):
     badge_colors = {
-        "emerald": ("#ecfdf5", "#047857", "#10b981", "#a7f3d0"),
-        "indigo": ("#eef2ff", "#4338ca", "#6366f1", "#c7d2fe"),
-        "cyan": ("#ecfeff", "#0e7490", "#06b6d4", "#a5f3fc"),
+        "emerald": ("rgba(16, 185, 129, 0.15)", "#34d399", "#10b981", "rgba(16, 185, 129, 0.4)"),
+        "rose": ("rgba(244, 63, 94, 0.15)", "#fb7185", "#f43f5e", "rgba(244, 63, 94, 0.4)"),
+        "cyan": ("rgba(6, 182, 212, 0.15)", "#38bdf8", "#06b6d4", "rgba(6, 182, 212, 0.4)"),
+        "indigo": ("rgba(99, 102, 241, 0.15)", "#818cf8", "#6366f1", "rgba(99, 102, 241, 0.4)"),
     }
     bg_pill, text_pill, dot_color, border_pill = badge_colors.get(slide.get("badge_color", "emerald"))
 
@@ -157,9 +166,9 @@ def generate_html_slide(slide):
                 <div class="comp-badge bad-badge">{h['status']}</div>
             </div>
             <div class="comp-card good">
-                <div class="comp-label" style="color: #047857;">{v['title']}</div>
-                <div class="comp-cost" style="color: #059669;">{v['cost']}</div>
-                <div class="comp-rate" style="color: #0f172a;">{v['rate']}</div>
+                <div class="comp-label" style="color: #34d399;">{v['title']}</div>
+                <div class="comp-cost" style="color: #34d399;">{v['cost']}</div>
+                <div class="comp-rate" style="color: #ffffff;">{v['rate']}</div>
                 <div class="comp-sub">{v['detail']}</div>
                 <div class="comp-badge good-badge">{v['status']}</div>
             </div>
@@ -200,9 +209,9 @@ def generate_html_slide(slide):
             width: 1080px;
             height: 1350px;
             overflow: hidden;
-            background: #ffffff;
+            background: #080a11;
             font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-            color: #0f172a;
+            color: #ffffff;
             position: relative;
         }}
         .canvas {{
@@ -212,9 +221,9 @@ def generate_html_slide(slide):
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            background: #fafaf9;
-            background-image: radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px);
-            background-size: 28px 28px;
+            background: radial-gradient(circle at 85% 15%, rgba(16, 185, 129, 0.15) 0%, transparent 60%),
+                        radial-gradient(circle at 15% 85%, rgba(6, 182, 212, 0.10) 0%, transparent 55%),
+                        #080a11;
         }}
         .top-row {{
             display: flex;
@@ -240,46 +249,48 @@ def generate_html_slide(slide):
             height: 12px;
             background: {dot_color};
             border-radius: 50%;
-            box-shadow: 0 0 10px {dot_color};
+            box-shadow: 0 0 14px {dot_color};
         }}
         .slide-counter {{
             font-family: 'JetBrains Mono', monospace;
             font-size: 26px;
             font-weight: 800;
-            color: #94a3b8;
+            color: #64748b;
         }}
         .headline {{
             font-size: 64px;
             font-weight: 900;
             line-height: 1.15;
             letter-spacing: -0.04em;
-            color: #0f172a;
+            color: #ffffff;
             margin: 30px 0;
         }}
         .headline span {{
-            color: #059669;
-            text-decoration: underline;
-            text-decoration-color: #a7f3d0;
-            text-underline-offset: 8px;
+            background: linear-gradient(135deg, #10b981 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }}
         .main-body {{
             font-size: 34px;
-            color: #334155;
+            color: #cbd5e1;
             font-weight: 500;
             line-height: 1.55;
             margin-top: 20px;
         }}
         .main-body b {{
-            color: #0f172a;
+            color: #ffffff;
             font-weight: 800;
         }}
+
+        /* Trigger Cards (Dark Glass) */
         .trigger-card {{
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 22px;
-            padding: 24px 32px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+            background: rgba(18, 22, 34, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 22px 28px;
+            margin-bottom: 18px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
         }}
         .trigger-top {{
             display: flex;
@@ -288,156 +299,181 @@ def generate_html_slide(slide):
             margin-bottom: 8px;
         }}
         .trigger-cat {{
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 800;
             letter-spacing: 0.04em;
-            text-transform: uppercase;
         }}
         .trigger-code {{
             font-family: 'JetBrains Mono', monospace;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
             color: #94a3b8;
-            background: #f1f5f9;
+            background: rgba(255, 255, 255, 0.06);
             padding: 4px 12px;
             border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }}
         .trigger-desc {{
-            font-size: 24px;
-            color: #475569;
-            font-weight: 600;
+            font-size: 22px;
+            color: #94a3b8;
+            font-weight: 500;
             line-height: 1.4;
         }}
+
+        /* Comparison Cards (Dark Mode Split) */
         .comp-grid {{
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
+            margin-top: 10px;
         }}
         .comp-card {{
-            border-radius: 28px;
-            padding: 34px 40px;
-            background: #ffffff;
-            border: 2px solid #e2e8f0;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+            border-radius: 22px;
+            padding: 28px 34px;
+            position: relative;
+            backdrop-filter: blur(10px);
         }}
         .comp-card.bad {{
-            background: #fff5f5;
-            border-color: #fecdd3;
+            background: rgba(244, 63, 94, 0.08);
+            border: 1.5px solid rgba(244, 63, 94, 0.35);
+            box-shadow: 0 4px 20px rgba(244, 63, 94, 0.1);
         }}
         .comp-card.good {{
-            background: #f0fdf4;
-            border-color: #bbf7d0;
-            box-shadow: 0 10px 30px rgba(5, 150, 105, 0.08);
+            background: rgba(16, 185, 129, 0.10);
+            border: 2px solid rgba(16, 185, 129, 0.45);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
         }}
         .comp-label {{
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: #64748b;
-            margin-bottom: 10px;
+            color: #94a3b8;
+            margin-bottom: 8px;
         }}
         .comp-cost {{
             font-family: 'JetBrains Mono', monospace;
-            font-size: 58px;
+            font-size: 52px;
             font-weight: 900;
-            color: #e11d48;
             margin-bottom: 6px;
         }}
+        .bad .comp-cost {{ color: #fb7185; }}
+        .good .comp-cost {{ color: #34d399; }}
         .comp-rate {{
-            font-size: 28px;
-            color: #334155;
+            font-size: 26px;
+            color: #ffffff;
             font-weight: 800;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }}
         .comp-sub {{
-            font-size: 24px;
-            color: #64748b;
-            font-weight: 600;
+            font-size: 21px;
+            color: #94a3b8;
+            font-weight: 500;
             margin-bottom: 14px;
         }}
         .comp-badge {{
             display: inline-block;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
-            padding: 6px 18px;
-            border-radius: 10px;
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-family: 'JetBrains Mono', monospace;
         }}
-        .bad-badge {{ background: #ffe4e6; color: #be123c; }}
-        .good-badge {{ background: #dcfce7; color: #15803d; }}
+        .bad-badge {{
+            background: rgba(244, 63, 94, 0.2);
+            color: #fb7185;
+            border: 1px solid rgba(244, 63, 94, 0.4);
+        }}
+        .good-badge {{
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }}
+
+        /* Pipeline Cards (Dark Glass) */
         .pipe-card {{
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 22px;
-            padding: 24px 30px;
+            background: rgba(18, 22, 34, 0.85);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: 20px;
+            padding: 22px 28px;
             display: flex;
             align-items: center;
             gap: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+            margin-bottom: 18px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
         }}
         .pipe-num {{
             font-family: 'JetBrains Mono', monospace;
             font-size: 32px;
             font-weight: 900;
-            color: #059669;
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.12);
+            padding: 8px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }}
         .pipe-info {{ flex: 1; }}
         .pipe-name {{
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 6px;
+            color: #ffffff;
+            margin-bottom: 4px;
         }}
         .pipe-desc {{
-            font-size: 22px;
-            color: #64748b;
+            font-size: 20px;
+            color: #94a3b8;
             font-weight: 500;
         }}
         .pipe-tag {{
             font-family: 'JetBrains Mono', monospace;
-            background: #ecfdf5;
-            color: #047857;
-            border: 1px solid #a7f3d0;
+            background: rgba(6, 182, 212, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(6, 182, 212, 0.35);
             padding: 8px 16px;
             border-radius: 10px;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
         }}
+
+        /* CTA Button */
         .cta-btn {{
             display: inline-block;
-            background: #0f172a;
-            color: #ffffff;
-            font-size: 38px;
-            font-weight: 800;
-            padding: 24px 52px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #041f14;
+            font-size: 36px;
+            font-weight: 900;
+            padding: 22px 52px;
             border-radius: 999px;
             font-family: 'JetBrains Mono', monospace;
-            margin: 34px 0 24px 0;
-            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.2);
+            margin: 32px 0 24px 0;
+            box-shadow: 0 12px 36px rgba(16, 185, 129, 0.35);
+            letter-spacing: -0.02em;
         }}
         .author-tag {{
-            font-size: 26px;
+            font-size: 24px;
             color: #64748b;
             font-weight: 700;
         }}
+
+        /* Footer Row */
         .footer-row {{
-            border-top: 2px solid #e2e8f0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }}
         .brand-name {{
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
             letter-spacing: 0.05em;
-            color: #94a3b8;
+            color: #64748b;
         }}
         .footer-text {{
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
-            color: #059669;
+            color: #34d399;
         }}
     </style>
 </head>
@@ -463,7 +499,7 @@ def generate_html_slide(slide):
     return html
 
 def render_slides_to_png():
-    print("🎨 Rendering 5 Vance Light-Theme Slides to 1080x1350 PNG...")
+    print("🎨 Rendering 5 Vance Dark Obsidian Slides to 1080x1350 PNG...")
     png_paths = []
     
     for s in SLIDES_DATA:
@@ -478,6 +514,7 @@ def render_slides_to_png():
             CHROME_BIN,
             "--headless=new",
             "--disable-gpu",
+            "--force-device-scale-factor=1",
             "--window-size=1080,1350",
             f"--screenshot={png_file}",
             f"file://{html_file.resolve()}"
@@ -502,7 +539,7 @@ def compile_pdf(png_paths):
     print(f"  ✅ PDF Created: {pdf_path} ({pdf_path.stat().st_size / 1024:.1f} KB)")
     return pdf_path
 
-INSTA_CAPTION = \"\"\"Most B2B founders burn $4,000 to $6,000/mo hiring human SDRs to spray 50 generic cold emails a day. 
+INSTA_CAPTION = """Most B2B founders burn $4,000 to $6,000/mo hiring human SDRs to spray 50 generic cold emails a day. 
 
 Result? 0.8% reply rate and a burnt domain in 30 days. 📉
 
@@ -520,7 +557,7 @@ Comment "VANCE" below or DM us @usevance.ai — our autonomous SDR will scan you
 
 🔗 Test the live sandbox: usevance.com (link in bio)
 
-#aisdr #b2bsaas #growtharchitecture #coldoutreach #speedtolead #gtmstrategy #salesautomation #usevance\"\"\"
+#aisdr #b2bsaas #growtharchitecture #coldoutreach #speedtolead #gtmstrategy #salesautomation #usevance"""
 
 def send_to_telegram(pdf_path, png_paths):
     print("\n📲 Sending Vance Carousel Assets to Telegram...")
@@ -539,7 +576,7 @@ def send_to_telegram(pdf_path, png_paths):
             media_items.append({
                 "type": "photo",
                 "media": f"attach://slide_{i}",
-                "caption": "📊 <b>VANCE AI • Slide 1/5: The 23 Buying Triggers That Replace a $4,000/mo Human SDR</b>\n\n👉 <i>Swipe right to see all 5 slides. Save to Photos & upload directly to Instagram!</i>" if i == 1 else "",
+                "caption": "📊 <b>VANCE AI • Slide 1/5: The 23 Buying Triggers That Replace a $4,000/mo Human SDR</b>\n\n👉 <i>Swipe right to see all 5 slides in Obsidian Dark Theme. Save to Photos & upload directly to Instagram!</i>" if i == 1 else "",
                 "parse_mode": "HTML"
             })
             
@@ -606,7 +643,7 @@ def send_to_telegram(pdf_path, png_paths):
         
         data_pdf.append(f"--{boundary_pdf}".encode())
         data_pdf.append(b'Content-Disposition: form-data; name="caption"\r\n')
-        caption_pdf = "📑 <b>Vance AI • 5-Slide B2B Swipeable PDF (LinkedIn Ready)</b>\n\n📌 <b>Topic:</b> The 23 Buying Triggers That Replace a $4,000/mo Human SDR\n\n👉 <b>LinkedIn Post:</b> Upload this PDF as a 'Document' post ➔ LinkedIn renders it as an interactive carousel!\n🔗 <b>CTA:</b> usevance.com"
+        caption_pdf = "📑 <b>Vance AI • 5-Slide B2B Swipeable PDF (LinkedIn Ready - Dark Theme)</b>\n\n📌 <b>Topic:</b> The 23 Buying Triggers That Replace a $4,000/mo Human SDR\n\n👉 <b>LinkedIn Post:</b> Upload this PDF as a 'Document' post ➔ LinkedIn renders it as an interactive carousel!\n🔗 <b>CTA:</b> usevance.com"
         data_pdf.append(caption_pdf.encode("utf-8"))
         
         data_pdf.append(f"--{boundary_pdf}".encode())
@@ -653,7 +690,7 @@ def log_to_nocodb(pdf_path):
         record = [{
             "Project": "vance",
             "Target Platform": "LinkedIn & Instagram Carousel",
-            "Asset Type": "5-Slide PDF & PNG Carousel (Light Mode)",
+            "Asset Type": "5-Slide PDF & PNG Carousel (Dark Obsidian)",
             "Hook / Title": "The 23 Buying Triggers That Replace a $4,000/mo Human SDR",
             "Script / Prompt / Code": f"PDF: {pdf_path.name}\n5 Slides: $4k SDR vs Vance, Intent Trigger Matrix (01-23), 4-Step Pipeline, 20 Free Verified Leads CTA.\nDomain: usevance.com",
             "Production Status": "Rendered (Ready to Post)",
@@ -676,7 +713,7 @@ def main():
     pdf_path = compile_pdf(png_paths)
     send_to_telegram(pdf_path, png_paths)
     log_to_nocodb(pdf_path)
-    print("\n🎉 Vance Carousel generated, compiled to PDF, sent to Telegram, and saved in NocoDB!")
+    print("\n🎉 Vance Dark Carousel generated, compiled to PDF, sent to Telegram, and saved in NocoDB!")
 
 if __name__ == "__main__":
     main()
