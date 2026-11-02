@@ -47,7 +47,7 @@ Instead of guessing, Vance runs autonomously on 23 Intent Buying Triggers:
 🚀 Capital & Leadership (Funding rounds & newly appointed VPs within 30 days)
 👀 Reverse-IP De-anonymization (ICP accounts visiting pricing/case-study pages 2+ times)
 
-Combined with our inbound sister engine TrackKaro (sub-15s response to ad leads), this is the complete Autonomous B2B Revenue Operating System.
+We don't buy static lists. We audit live web signals and react in 15 minutes with hyper-personalized 40-word pitches.
 
 🚀 DAY 1 FOUNDING PARTNER OFFER:
 We are onboarding our first 10 B2B tech companies and agencies this week.
@@ -59,7 +59,7 @@ Our AI engine will scan live intent streams and deliver 20 verified high-intent 
 
 Built with conviction by @mangal777 
 
-#buildinpublic #aisdr #b2bsaas #growtharchitecture #outboundautomation #gtmstrategy #speedtolead #usevance #foundermode
+#buildinpublic #aisdr #b2bsaas #growtharchitecture #outboundautomation #gtmstrategy #usevance #foundermode
 """
 
 SLIDES_DATA = [
@@ -108,26 +108,26 @@ SLIDES_DATA = [
         "features": [
             {"icon": "⚡", "title": "23 Buying Triggers", "desc": "Hiring surges, tech stack churn, funding rounds, and website reverse-IP tracking."},
             {"icon": "⏱️", "title": "15-Min Cadence Engine", "desc": "Captures buyer attention in real-time while their intent trigger is at its absolute peak."},
-            {"icon": "🧠", "title": "Zero Boilerplate Pitching", "desc": "Gemini 1.5 Flash crafts hyper-specific 60-word angles tied directly to the trigger."},
+            {"icon": "🧠", "title": "Zero Boilerplate Pitching", "desc": "Gemini 1.5 Flash crafts hyper-specific 50-word angles tied directly to the trigger."},
             {"icon": "🛡️", "title": "99.2% Deliverability SLA", "desc": "Isolated secondary warm domain network keeps your primary domain 100% safe."}
         ],
-        "footer": "The complete ecosystem ➔"
+        "footer": "The two-pillar architecture ➔"
     },
     {
         "num": 4,
-        "badge": "THE FULL ECOSYSTEM",
+        "badge": "THE ARCHITECTURE",
         "badge_color": "cyan",
-        "headline": "Autonomous Outbound Meets <span>Instant Inbound</span>",
+        "headline": "Two Pillars: <span>Live Signals + Micro-Pitching</span>",
         "content_type": "dual_system",
         "outbound": {
-            "title": "OUTBOUND: VANCE AI",
-            "desc": "Hunts verified B2B decision-makers across 23 intent feeds and books qualified meetings on autopilot.",
-            "stat": "23 Intent Streams"
+            "title": "PILLAR 1: LIVE INTENT AUDIT",
+            "desc": "Scans 23 signals 24/7 (hiring spikes on LinkedIn, Google SERP sweet spots, SDK headers).",
+            "stat": "23 Live Signals"
         },
         "inbound": {
-            "title": "INBOUND: TRACKKARO AI",
-            "desc": "Connects ad form submissions to sales reps within 15 seconds via instant WhatsApp assets & sound alerts.",
-            "stat": "Sub-15s Speed-to-Lead"
+            "title": "PILLAR 2: BESPOKE DISPATCH",
+            "desc": "Generates 40-word problem-solver reaction pitches. Delivered via isolated domains with <2% bounce rate.",
+            "stat": "Sub-2% Bounce SLA"
         },
         "footer": "Claim founding partner perks ➔"
     },
@@ -197,7 +197,7 @@ def generate_html_slide(slide):
         </div>
         <div class="synced-banner">
             <span class="sync-dot"></span>
-            <b>Unified Architecture:</b> One engine to hunt qualified pipeline & dispatch instant responses.
+            <b>Zero Domain Decay:</b> Secondary domain network + waterfall verification = sub-2% bounce SLA.
         </div>
         """
     else:
