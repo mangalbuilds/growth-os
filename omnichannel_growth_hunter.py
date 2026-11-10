@@ -29,7 +29,7 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "-5489183481")
 
 DB_PATH = Path.home() / "Mangal" / "growth_engine" / "growth_vault.db"
-PROJECTS_CONFIG = Path.home() / ".gemini" / "config" / "projects.yaml"
+PROJECTS_CONFIG = Path.home() / "Mangal" / "growth_engine" / "config" / "projects.yaml"
 
 # NocoDB Direct CRM Configuration
 NOCO_URL = os.environ.get("NOCO_URL", "https://crm.trackkaroai.com")
@@ -77,40 +77,65 @@ def search_reddit_opportunities(project_key, project_data, limit=4):
     if not keywords or not subreddits:
         return []
     
-    # Subreddit filter: (site:reddit.com/r/sales OR site:reddit.com/r/coldemail)
-    sub_query = " OR ".join([f"site:reddit.com/{s.strip()}" for s in subreddits[:3]])
-    kw_query = " OR ".join([f'"{k}"' for k in keywords[:3]])
-    query = f"({sub_query}) ({kw_query})"
+    opportunities = []
+    seen_ids = set()
+    
+    # Generate focused search queries to catch fresh discussions naturally
+    queries = []
+    for sub in subreddits[:3]:
+        for kw in keywords[:2]:
+            queries.append(f'site:reddit.com/{sub.strip()} {kw}')
     
     url = "https://google.serper.dev/search"
-    payload = json.dumps({"q": query, "num": limit * 2}).encode()
-    req = urllib.request.Request(url, data=payload, headers={
-        "X-API-KEY": SERPER_API_KEY,
-        "Content-Type": "application/json"
-    })
     
-    try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            data = json.loads(resp.read().decode())
-            results = data.get("organic", [])
-            opportunities = []
-            for r in results:
-                link = r.get("link", "")
-                if "/comments/" in link:
-                    # Extract unique reddit thread ID
-                    match = re.search(r"/comments/([a-z0-9]+)/", link)
-                    t_id = match.group(1) if match else link
-                    opportunities.append({
-                        "thread_id": t_id,
-                        "title": r.get("title", ""),
-                        "url": link,
-                        "snippet": r.get("snippet", ""),
-                        "channel": "/".join(link.split("/")[:5])
-                    })
-            return opportunities[:limit]
-    except Exception as e:
-        print(f"⚠️ Search error for {project_key}: {e}")
-        return []
+    for q in queries[:3]:
+        if len(opportunities) >= limit:
+            break
+            
+        # TBS 'qdr:m' strictly restricts Google Serper to Past Month (active threads only!)
+        payload = json.dumps({
+            "q": q,
+            "num": limit * 2,
+            "tbs": "qdr:m"
+        }).encode()
+        
+        req = urllib.request.Request(url, data=payload, headers={
+            "X-API-KEY": SERPER_API_KEY,
+            "Content-Type": "application/json"
+        })
+        
+        try:
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                data = json.loads(resp.read().decode())
+                results = data.get("organic", [])
+                for r in results:
+                    link = r.get("link", "")
+                    if "/comments/" in link:
+                        match = re.search(r"/comments/([a-z0-9]+)/", link)
+                        t_id = match.group(1) if match else link
+                        
+                        # Filter out ancient thread IDs (e.g. 5-6 letter base36 IDs like 'vz6mxu' from 4 years ago)
+                        # Modern 2025/2026 thread IDs are 7 characters and start with '1'
+                        if len(t_id) < 6 or (len(t_id) == 6 and not t_id.startswith("1")):
+                            continue
+                            
+                        if t_id not in seen_ids:
+                            seen_ids.add(t_id)
+                            opportunities.append({
+                                "thread_id": t_id,
+                                "title": r.get("title", ""),
+                                "url": link,
+                                "snippet": r.get("snippet", ""),
+                                "date": r.get("date", "Active This Month"),
+                                "channel": "/".join(link.split("/")[:5])
+                            })
+                            if len(opportunities) >= limit:
+                                break
+        except Exception as e:
+            print(f"⚠️ Search error for {project_key} ({q}): {e}")
+            continue
+            
+    return opportunities[:limit]
 
 def draft_ai_response(project_data, opp):
     p_name = project_data.get("name", "TrackKaro")
@@ -147,21 +172,35 @@ Draft the response only:"""
 def send_telegram_alert(project_key, project_data, opp, draft):
     p_name = project_data.get("name", project_key.upper())
     
+    # Strict dynamic chat routing per isolated project
+    chat_id = project_data.get("telegram_chat_id")
+    if not chat_id:
+        if project_key in ["vance", "usevance"]:
+            chat_id = os.environ.get("VANCE_TELEGRAM_CHAT_ID", "-1003882353811")
+        elif project_key in ["prex", "getprex"]:
+            chat_id = os.environ.get("PREX_TELEGRAM_CHAT_ID", "-1003913485567")
+        elif project_key in ["trackkaro", "trackkaroai"]:
+            chat_id = "-5489183481"
+        else:
+            chat_id = "-5489183481"
+    
     clean_title = opp['title'].replace("<", "&lt;").replace(">", "&gt;")
     clean_draft = draft.replace("<", "&lt;").replace(">", "&gt;")
+    post_date = opp.get("date", "Active This Month")
     
     text = (
-        f"🎯 <b>[NEW REDDIT LEAD: {p_name}]</b>\n\n"
+        f"🎯 <b>[NEW REDDIT INTENT LEAD: {p_name}]</b>\n\n"
         f"📌 <b>Thread:</b> {clean_title}\n"
-        f"🔗 <a href=\"{opp['url']}\">👉 Click Here to Open Reddit Post</a>\n\n"
-        f"💬 <b>AI Draft (Tap text to copy):</b>\n"
+        f"⚡ <b>Freshness:</b> {post_date}\n"
+        f"🔗 <a href=\"{opp['url']}\">👉 Click Here to Open Reddit Thread</a>\n\n"
+        f"💬 <b>AI Experience Reply (Tap to Copy):</b>\n"
         f"<code>{clean_draft}</code>\n\n"
-        f"<i>💡 Reply directly from your Reddit mobile app to maximize upvotes & trust!</i>"
+        f"<i>💡 Tap the text box above to copy, open the link, and post directly from your Reddit account u/NotNecessary- to build karma & authority!</i>"
     )
     
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     payload = json.dumps({
-        "chat_id": TELEGRAM_CHAT_ID,
+        "chat_id": chat_id,
         "text": text,
         "parse_mode": "HTML",
         "disable_web_page_preview": False
@@ -172,7 +211,7 @@ def send_telegram_alert(project_key, project_data, opp, draft):
         with urllib.request.urlopen(req, timeout=10) as resp:
             return resp.getcode() == 200
     except Exception as e:
-        print(f"⚠️ Telegram alert failed: {e}")
+        print(f"⚠️ Telegram alert failed for {project_key} (chat {chat_id}): {e}")
         return False
 
 def sync_opportunity_to_nocodb(project_key, opp, draft):

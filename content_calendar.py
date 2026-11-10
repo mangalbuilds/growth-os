@@ -392,10 +392,19 @@ def dispatch_telegram_alert(day_key, account="vance"):
         f"<i>👉 Review media attached below, copy caption, and upload to {account_tag} in 30 seconds!</i>"
     )
     
+    # Determine product-specific Telegram destination supergroup
+    account_clean = account.lower()
+    if account_clean in ["vance", "usevance"]:
+        target_chat_id = os.getenv("VANCE_TELEGRAM_CHAT_ID", "-1003882353811")
+    elif account_clean in ["prex", "getprex"]:
+        target_chat_id = os.getenv("PREX_TELEGRAM_CHAT_ID", "-1003913485567")
+    else:
+        target_chat_id = TELEGRAM_CHAT_ID
+
     # 1. Send the text notification
     msg_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     payload = json.dumps({
-        "chat_id": TELEGRAM_CHAT_ID,
+        "chat_id": target_chat_id,
         "text": text,
         "parse_mode": "HTML",
         "disable_web_page_preview": True
@@ -403,7 +412,7 @@ def dispatch_telegram_alert(day_key, account="vance"):
     
     req = urllib.request.Request(msg_url, data=payload, headers={"Content-Type": "application/json"})
     with urllib.request.urlopen(req) as resp:
-        print("  ✓ Text alert & copyable caption sent to Telegram!")
+        print(f"  ✓ Text alert & copyable caption sent to Telegram (chat: {target_chat_id})!")
 
     # 2. Send media if exists
     m_type = item.get("media_type")
@@ -414,7 +423,7 @@ def dispatch_telegram_alert(day_key, account="vance"):
         data = []
         data.append(f"--{boundary}".encode())
         data.append(b'Content-Disposition: form-data; name="chat_id"\r\n')
-        data.append(TELEGRAM_CHAT_ID.encode())
+        data.append(str(target_chat_id).encode())
         
         endpoint = "sendPhoto" if m_type == "photo" else ("sendVideo" if m_type == "video" else "sendDocument")
         field_name = "photo" if m_type == "photo" else ("video" if m_type == "video" else "document")

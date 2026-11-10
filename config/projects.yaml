@@ -6,6 +6,7 @@ projects:
     name: "TrackKaro AI"
     category: "B2B Speed-to-Lead & Inbound Automation"
     url: "https://trackkaroai.com"
+    telegram_chat_id: "-5489183481"
     one_liner: "Connects Meta/Google ad form submissions to human sales reps within 15 seconds via instant WhatsApp asset delivery, Telegram sound alerts, and CRM sync."
     icp: "High-ticket Agency Owners, Luxury Real Estate Brokers (Dubai/Global), Aesthetic Clinics, Solar Companies."
     target_subreddits:
@@ -26,26 +27,26 @@ projects:
   vance:
     name: "Vance AI SDR"
     category: "Autonomous B2B Intent Outbound SDR (23 Buying Triggers)"
-    url: "https://vance.trackkaroai.com"
-    one_liner: "Autonomous B2B Intent Outbound SDR detecting 23 buying triggers, scouting verified decision-makers, and synthesizing bespoke 1-to-1 pitches on autopilot."
-    offer: "$1,500–$2,500/mo Autonomous AI SDR Retainer for B2B SaaS & Dev Agencies"
-    icp: "B2B SaaS Founders, Software Development Agencies, Growth Marketing Agencies, High-Ticket B2B Consultants."
+    url: "https://usevance.com"
+    telegram_chat_id: "-1003882353811"
+    one_liner: "Autonomous B2B Intent Outbound SDR detecting 23 buying triggers across Ashby/Greenhouse, seed rounds, and tech churn to dispatch bespoke 35-word hooks within 15 minutes."
+    offer: "$1,500/mo Autonomous AI SDR Retainer for B2B SaaS & Dev Agencies"
+    icp: "B2B SaaS Founders, Software Development Studios, Growth Marketing Agencies."
     target_subreddits:
       - "r/sales"
       - "r/coldemail"
-      - "r/leadgeneration"
-      - "r/Emailmarketing"
       - "r/SaaS"
+      - "r/leadgeneration"
+      - "r/b2bmarketing"
       - "r/agency"
     trigger_keywords:
+      - "cold email low reply rate"
       - "hiring an SDR vs AI"
-      - "cold email response rate"
-      - "how to get agency clients"
-      - "apollo vs clay for outbound"
-      - "b2b lead generation retainer"
-      - "cold outbound take so much time"
+      - "domain burned cold email"
       - "buying triggers intent data"
-    disclosure: "Full disclosure, I built and run Vance AI SDR to automate our agency prospecting and outbound pipeline."
+      - "apollo list high bounce rate"
+      - "outbound meeting booking"
+    disclosure: "Full disclosure: I built and run usevance.com to automate intent-based outbound and replace static list spraying."
 
   jarvis:
     name: "Vance AI SDR (Jarvis)"
@@ -62,6 +63,7 @@ projects:
     disclosure: "Full disclosure, I built and run Vance AI SDR."
 
   creatigen:
+    enabled: false  # Disabled by Mangal (Reddit automation paused)
     name: "Creatigen / HQ"
     category: "AI Video Repurposing (OpusClip Alternative)"
     one_liner: "Autonomous AI engine that turns 1-hour podcasts and YouTube videos into 10 viral 9:16 shorts with bouncy dynamic captions and virality scoring."
@@ -82,6 +84,7 @@ projects:
     disclosure: "Full disclosure, I built Creatigen as an autonomous video repurposing pipeline to cut down 10 hours of manual short editing."
 
   kanjo:
+    enabled: false  # Paused by Mangal
     name: "Kanjo"
     category: "Mood & Emotion Discovery Engine"
     one_liner: "Emotion-based recommendation and discovery engine that curates audio, activities, and experiences based on your current psychological state."
@@ -99,7 +102,32 @@ projects:
       - "new apps to try"
     disclosure: "Full disclosure, I'm the indie developer behind Kanjo—built it because I hated rigid questionnaire-style mood trackers."
 
+  prex:
+    name: "Prex"
+    category: "Pre-Market Talent Intelligence & Founder Dispatch"
+    url: "https://getprex.com"
+    telegram_chat_id: "-1003913485567"
+    one_liner: "Pre-market talent intelligence uncovering stealth, unlisted AI PM, Growth Engineer, and Founder's Office roles 2 to 4 weeks before public job boards."
+    offer: "₹499/mo (~$6/mo) Pro Access with 1-Tap Founder Dispatch & Telegram Sirens"
+    icp: "Job seekers, AI PMs, Growth Engineers, and Founder's Office candidates tired of ATS black holes."
+    target_subreddits:
+      - "r/ProductManagement"
+      - "r/jobsearchhacks"
+      - "r/cscareerquestions"
+      - "r/startups"
+      - "r/recruitinghell"
+      - "r/techjobs"
+    trigger_keywords:
+      - "applied to 200 jobs ghosted"
+      - "ats black hole"
+      - "how to find stealth ai jobs"
+      - "email founder directly for job"
+      - "unlisted startup job"
+      - "founder office role hiring"
+    disclosure: "Full disclosure: I built getprex.com to scrape unlisted startup roles and founder contacts before they hit public ATS boards."
+
   job_hunter:
+    enabled: false  # Paused by Mangal
     name: "Autonomous Job Hunter Copilot"
     category: "AI Job Hunt & ATS Qualification"
     one_liner: "Autonomous pipeline combining Serper API, Google Search queries, and Gemini 1.5 Flash scoring to qualify tech jobs and send real-time Telegram push alerts."
