@@ -156,21 +156,37 @@ def draft_ai_response(project_key, project_data, opp):
     one_liner = project_data.get("one_liner", "")
     disclosure = project_data.get("disclosure", "")
     
-    prompt = f"""You are Mangal Soren — elite AI Engineer and Founder of {p_name}.
-Project Description: {one_liner}
-Ethical Disclosure Rule: {disclosure}
+    if project_key in ['prex', 'getprex']:
+        prompt = f"""You are a cynical, pragmatic tech builder & software engineer posting casually on Reddit.
+Do NOT sound like ChatGPT, an AI assistant, or a corporate LinkedIn thought leader. Zero formal greetings, zero 'Honestly,', zero boilerplate.
+Tone: Blunt, lowercase/casual punctuation, high-signal developer reality.
+Length: 2 to 3 sentences max (under 45 words).
 
-A user on Reddit asked or expressed this pain:
+Reddit Post to reply to:
 Title: {opp['title']}
 Context: {opp['snippet']}
 
-Write a Reddit reply adhering strictly to the 'reddit-automation' skill rules:
-1. Use 'Experience Grammar' (e.g. "I ran into this exact thing...", "What fixed it for us was..."). NEVER use advice grammar ("You should", "You must").
-2. Length: 2 to 3 sentences, strictly between 30 and 50 words.
-3. React directly to the user's situation with authentic technical nuance.
-4. If natural, include the honest disclosure at the end. Do NOT sound like an ad or corporate sales rep. Zero hashtags, zero emojis.
+Rules:
+1. State the ground reality: most early-stage AI startups don't even push to LinkedIn due to spam; they only maintain active Ashby or Greenhouse endpoints.
+2. End with an irresistible 'Asset Bait' that sparks comments/DMs (e.g. 'i have a raw list of ~120 stealth/seed ai startups hiring on ashby this week without linkedin posts, drop a comment or dm if you want it').
+3. NEVER paste any website links. Zero emojis, zero hashtags.
 
-Draft the response only:"""
+Write the casual raw comment only:"""
+    else:
+        prompt = f"""You are a pragmatic B2B engineer posting casually on Reddit.
+Do NOT sound like ChatGPT, Claude, or a sales rep.
+Tone: Direct, cynical, experience-driven. 2 to 3 sentences max (under 45 words).
+
+Reddit Post to reply to:
+Title: {opp['title']}
+Context: {opp['snippet']}
+
+Rules:
+1. Focus on real technical solutions (e.g. inbox reputation, buying signals vs cold spray).
+2. End with an offer to share the raw checklist or data via DM/comment.
+3. Zero links, zero emojis, zero corporate fluff.
+
+Write the raw comment only:"""
 
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
     payload = json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode()
@@ -183,7 +199,7 @@ Draft the response only:"""
     except Exception as e:
         # Dynamic context-aware authentic fallback per project
         if project_key in ['prex', 'getprex']:
-            return f"Applying through massive job aggregators is brutal right now with automated ATS keyword filters. What consistently helped me get replies was skipping LinkedIn, finding the startup's direct unlisted Ashby or Greenhouse job board URL, and reaching out to the team with a short proof-of-work breakdown before the listing gets flooded. ({disclosure})"
+            return f"most early ai startups dont even push to linkedin anymore, way too much bot spam. they just keep active ashby or greenhouse boards. i put together a raw sheet of ~120 stealth/seed ai startups hiring on ashby this week without linkedin posts, drop a comment or dm if you want the link."
         elif project_key in ['vance', 'usevance', 'jarvis']:
             return f"Cold email deliverability is night and day once you switch from cold bulk blasts to signal-based triggers. What solved it for us was waiting for actual buying intent triggers (hiring surges, tech churn) and keeping reply volumes under 35 per mailbox with strict SPF/DKIM/DMARC alignment. ({disclosure})"
         else:
