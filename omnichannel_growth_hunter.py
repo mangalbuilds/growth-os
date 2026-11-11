@@ -24,7 +24,16 @@ import env_loader
 
 # --- Configuration & Credentials ---
 SERPER_API_KEY = os.environ.get("SERPER_API_KEY", "")
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+# Direct hard-enforced key load from local .env to bypass stale shell variables
+def get_clean_gemini_key():
+    p = Path(__file__).resolve().parent / ".env"
+    if p.exists():
+        for l in p.read_text().splitlines():
+            if l.startswith("GEMINI_API_KEY="):
+                return l.split("=", 1)[1].strip().strip('"').strip("'")
+    return os.environ.get("GEMINI_API_KEY", "")
+
+GEMINI_API_KEY = get_clean_gemini_key()
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "-5489183481")
 
@@ -161,54 +170,55 @@ def draft_ai_response(project_key, project_data, opp):
     one_liner = project_data.get("one_liner", "")
     disclosure = project_data.get("disclosure", "")
     
+    title = opp.get("title", "")
+    snippet = opp.get("snippet", "")
+    
     if project_key in ['prex', 'getprex']:
-        prompt = f"""You are a cynical, pragmatic tech builder & software engineer posting casually on Reddit.
-Do NOT sound like ChatGPT, an AI assistant, or a corporate LinkedIn thought leader. Zero formal greetings, zero 'Honestly,', zero boilerplate.
-Tone: Blunt, lowercase/casual punctuation, high-signal developer reality.
-Length: 2 to 3 sentences max (under 45 words).
+        prompt = f"""You are a cynical, pragmatic tech builder & senior engineer replying directly to this specific Reddit thread.
+Post Title: {title}
+Post Content: {snippet}
 
-Reddit Post to reply to:
-Title: {opp['title']}
-Context: {opp['snippet']}
+CRITICAL RULES:
+1. Speak DIRECTLY to what the author is discussing in the title and context. Do NOT repeat a generic script.
+2. Tone: Casual, blunt, realistic developer perspective. Zero formal openings (no 'Honestly', no 'In my experience'), lowercase or relaxed punctuation.
+3. Length: Strictly 2 to 3 sentences (under 45 words).
+4. Connect their exact problem to hiring/startup reality if relevant, or offer a pragmatic observation.
+5. End naturally with: 'shoot me a dm if you want the unlisted startup sheet' ONLY if it makes sense contextually, otherwise give pure sharp advice.
+6. Zero emojis, zero hashtags, zero links.
 
-Rules:
-1. State the ground reality: most early-stage AI startups don't even push to LinkedIn due to spam; they only maintain active Ashby or Greenhouse endpoints.
-2. End with an irresistible 'Asset Bait' that sparks comments/DMs (e.g. 'i have a raw list of ~120 stealth/seed ai startups hiring on ashby this week without linkedin posts, shoot me a dm if you want it'). NEVER say 'drop a comment and i will dm you' — always make the user initiate the DM to bypass Reddit outbound rate limits.
-3. NEVER paste any website links. Zero emojis, zero hashtags.
-
-Write the casual raw comment only:"""
+Write the direct reply only:"""
     else:
         prompt = f"""You are a pragmatic B2B engineer posting casually on Reddit.
-Do NOT sound like ChatGPT, Claude, or a sales rep.
+Post Title: {title}
+Context: {snippet}
+
 Tone: Direct, cynical, experience-driven. 2 to 3 sentences max (under 45 words).
-
-Reddit Post to reply to:
-Title: {opp['title']}
-Context: {opp['snippet']}
-
-Rules:
-1. Focus on real technical solutions (e.g. inbox reputation, buying signals vs cold spray).
-2. End with an offer to share the raw checklist or data via DM/comment.
-3. Zero links, zero emojis, zero corporate fluff.
-
+Focus on the technical solution. Zero links, zero emojis, zero corporate fluff.
 Write the raw comment only:"""
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
+    headers = {"Content-Type": "application/json"}
     payload = json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode()
-    req = urllib.request.Request(url, data=payload, headers={"Content-Type": "application/json"})
     
-    try:
-        with urllib.request.urlopen(req, timeout=25) as resp:
-            res = json.loads(resp.read().decode())
-            return res["candidates"][0]["content"]["parts"][0]["text"].strip()
-    except Exception as e:
-        # Dynamic context-aware authentic fallback per project
-        if project_key in ['prex', 'getprex']:
-            return f"most early ai startups dont even push to linkedin anymore, way too much bot spam. they just keep active ashby or greenhouse boards. i put together a raw sheet of ~120 stealth/seed ai startups hiring on ashby this week without linkedin posts, drop a comment or dm if you want the link."
-        elif project_key in ['vance', 'usevance', 'jarvis']:
-            return f"Cold email deliverability is night and day once you switch from cold bulk blasts to signal-based triggers. What solved it for us was waiting for actual buying intent triggers (hiring surges, tech churn) and keeping reply volumes under 35 per mailbox with strict SPF/DKIM/DMARC alignment. ({disclosure})"
-        else:
-            return f"I ran into this exact challenge recently. What worked for us was tightening the workflow and eliminating manual handoffs with real-time signal triggers. ({disclosure})"
+    # Try gemini-3.5-flash first (fastest & high-context), with fallback to gemini-flash-latest
+    for m in ["gemini-3.5-flash", "gemini-flash-latest"]:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={GEMINI_API_KEY}"
+        req = urllib.request.Request(url, data=payload, headers=headers)
+        try:
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                res = json.loads(resp.read().decode())
+                txt = res["candidates"][0]["content"]["parts"][0]["text"].strip()
+                if txt:
+                    return txt
+        except Exception as e:
+            continue
+
+    # Context-aware fallback if all APIs fail
+    if "product manager" in title.lower() or "pm" in title.lower():
+        return "most early-stage ai teams expect pms to read api docs and run sql because there's no luxury of dedicated specs. if you want to see what tech stacks early ai teams are actually hiring for, shoot me a dm."
+    elif "ats" in title.lower() or "ghosted" in title.lower() or "linkedin" in title.lower():
+        return "applying on linkedin right now is basically a bot lottery because of automated filters. early teams just use raw ashby or greenhouse boards without syndicating, shoot me a dm if you want the unlisted startup list."
+    else:
+        return "most early teams don't even push these to public boards anymore because of applicant noise. what actually works is finding active unlisted ashby endpoints directly, shoot me a dm if you want the raw list."
 
 def send_telegram_alert(project_key, project_data, opp, draft):
     p_name = project_data.get("name", project_key.upper())
