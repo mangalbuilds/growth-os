@@ -168,7 +168,7 @@ Context: {opp['snippet']}
 
 Rules:
 1. State the ground reality: most early-stage AI startups don't even push to LinkedIn due to spam; they only maintain active Ashby or Greenhouse endpoints.
-2. End with an irresistible 'Asset Bait' that sparks comments/DMs (e.g. 'i have a raw list of ~120 stealth/seed ai startups hiring on ashby this week without linkedin posts, drop a comment or dm if you want it').
+2. End with an irresistible 'Asset Bait' that sparks comments/DMs (e.g. 'i have a raw list of ~120 stealth/seed ai startups hiring on ashby this week without linkedin posts, shoot me a dm if you want it'). NEVER say 'drop a comment and i will dm you' — always make the user initiate the DM to bypass Reddit outbound rate limits.
 3. NEVER paste any website links. Zero emojis, zero hashtags.
 
 Write the casual raw comment only:"""
