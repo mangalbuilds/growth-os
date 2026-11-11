@@ -105,7 +105,7 @@ def search_reddit_opportunities(project_key, project_data, limit=4):
         })
         
         try:
-            with urllib.request.urlopen(req, timeout=10) as resp:
+            with urllib.request.urlopen(req, timeout=25) as resp:
                 data = json.loads(resp.read().decode())
                 results = data.get("organic", [])
                 for r in results:
@@ -172,12 +172,12 @@ Write a Reddit reply adhering strictly to the 'reddit-automation' skill rules:
 
 Draft the response only:"""
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key={GEMINI_API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
     payload = json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode()
     req = urllib.request.Request(url, data=payload, headers={"Content-Type": "application/json"})
     
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=25) as resp:
             res = json.loads(resp.read().decode())
             return res["candidates"][0]["content"]["parts"][0]["text"].strip()
     except Exception as e:
@@ -228,7 +228,7 @@ def send_telegram_alert(project_key, project_data, opp, draft):
     
     req = urllib.request.Request(url, data=payload, headers={"Content-Type": "application/json"})
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=25) as resp:
             return resp.getcode() == 200
     except Exception as e:
         print(f"⚠️ Telegram alert failed for {project_key} (chat {chat_id}): {e}")
@@ -376,7 +376,7 @@ def sync_all_to_nocodb():
             headers={"xc-token": NOCO_TOKEN, "Content-Type": "application/json"},
             method="POST"
         )
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=25) as resp:
             print(f"  ✅ Successfully synced {len(records)} records to NocoDB ({NOCO_URL})!")
     except Exception as e:
         print(f"  ⚠️ NocoDB bulk sync error: {e}")
