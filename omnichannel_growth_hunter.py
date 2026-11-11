@@ -136,15 +136,15 @@ def search_reddit_opportunities(project_key, project_data, limit=4):
                             continue
                             
                         opportunities.append({
-                                "thread_id": t_id,
-                                "title": r.get("title", ""),
-                                "url": link,
-                                "snippet": r.get("snippet", ""),
-                                "date": r.get("date", "Active This Month"),
-                                "channel": "/".join(link.split("/")[:5])
-                            })
-                            if len(opportunities) >= limit:
-                                break
+                            "thread_id": t_id,
+                            "title": r.get("title", ""),
+                            "url": link,
+                            "snippet": r.get("snippet", ""),
+                            "date": r.get("date", "Active This Month"),
+                            "channel": "/".join(link.split("/")[:5])
+                        })
+                        if len(opportunities) >= limit:
+                            break
         except Exception as e:
             print(f"⚠️ Search error for {project_key} ({q}): {e}")
             continue
