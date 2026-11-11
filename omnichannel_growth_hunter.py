@@ -167,26 +167,39 @@ def search_reddit_opportunities(project_key, project_data, limit=4):
 
 def draft_ai_response(project_key, project_data, opp):
     p_name = project_data.get("name", "TrackKaro")
-    one_liner = project_data.get("one_liner", "")
-    disclosure = project_data.get("disclosure", "")
-    
     title = opp.get("title", "")
     snippet = opp.get("snippet", "")
     
     if project_key in ['prex', 'getprex']:
-        prompt = f"""You are a cynical, pragmatic tech builder & senior engineer replying directly to this specific Reddit thread.
-Post Title: {title}
-Post Content: {snippet}
+        prompt = f"""You are an unlisted job market researcher commenting on Reddit as u/NotNecessary-.
+Your goal is to drop hyper-relevant, cynical, 2-line developer-style insights.
 
-CRITICAL RULES:
-1. Speak DIRECTLY to what the author is discussing in the title and context. Do NOT repeat a generic script.
-2. Tone: Casual, blunt, realistic developer perspective. Zero formal openings (no 'Honestly', no 'In my experience'), lowercase or relaxed punctuation.
-3. Length: Strictly 2 to 3 sentences (under 45 words).
-4. Connect their exact problem to hiring/startup reality if relevant, or offer a pragmatic observation.
-5. End naturally with: 'shoot me a dm if you want the unlisted startup sheet' ONLY if it makes sense contextually, otherwise give pure sharp advice.
-6. Zero emojis, zero hashtags, zero links.
+RULES:
+1. Tone: Lowercase, blunt, zero corporate fluff, no 'Honestly/Furthermore/In my opinion'. Max 2-3 sentences (under 45 words).
+2. Never say 'spreadsheet' or 'sheet' (because getprex.com is a live feed). Use 'live feed', 'unlisted tracker', or 'raw board scrapers'.
+3. Always classify OP's post into ONE of these two buckets:
 
-Write the direct reply only:"""
+--- BUCKET 1: JOB SEARCH PAIN / GHOSTING / ATS COMPLAINT ---
+Condition: OP applied to 50-300+ jobs on LinkedIn/Indeed, complains about ghosting, ATS rejections, or 1000+ applicants.
+Draft Structure:
+- Line 1: Validate why Indeed/LinkedIn is a bot-infested lottery.
+- Line 2: Suggest bypassing aggregators for direct Ashby/Greenhouse links of early-stage AI startups.
+- Line 3: 'shoot me a dm if you want the link to the live unlisted feed i'm tracking.'
+
+--- BUCKET 2: CAREER DEBATE / ROLE EVOLUTION / SKILL DISCUSSION ---
+Condition: OP asks a conceptual question (e.g., 'Are PMs expected to code?', 'Is market shifting?', 'Salary trends').
+Draft Structure:
+- Answer OP's specific question directly using observations from indexing early-stage AI startups on Ashby.
+- ZERO promotion, NO CTA, NO 'DM me', NO mention of links. Pure authority/karma building.
+
+--- BUCKET 3: IRRELEVANT / GENERAL VENTING ---
+If the post has nothing to do with tech/AI hiring or job mechanics, output: 'SKIP'.
+
+Reddit Post:
+Title: {title}
+Context: {snippet}
+
+Draft the reply only (or output 'SKIP'):"""
     else:
         prompt = f"""You are a pragmatic B2B engineer posting casually on Reddit.
 Post Title: {title}
@@ -212,13 +225,14 @@ Write the raw comment only:"""
         except Exception as e:
             continue
 
-    # Context-aware fallback if all APIs fail
-    if "product manager" in title.lower() or "pm" in title.lower():
-        return "most early-stage ai teams expect pms to read api docs and run sql because there's no luxury of dedicated specs. if you want to see what tech stacks early ai teams are actually hiring for, shoot me a dm."
-    elif "ats" in title.lower() or "ghosted" in title.lower() or "linkedin" in title.lower():
-        return "applying on linkedin right now is basically a bot lottery because of automated filters. early teams just use raw ashby or greenhouse boards without syndicating, shoot me a dm if you want the unlisted startup list."
+    # Context-aware fallback if API timeout occurs
+    title_lower = title.lower()
+    if any(k in title_lower for k in ["ats", "ghosted", "linkedin", "applied", "application", "reject"]):
+        return "applying on linkedin right now is basically a bot lottery because of automated keyword filters. early teams just use raw ashby or greenhouse boards without syndicating, shoot me a dm if you want the link to the live unlisted feed i'm tracking."
+    elif any(k in title_lower for k in ["pm", "product manager", "engineer", "code", "tech stack", "salary", "hire"]):
+        return "most early-stage ai teams expect pms and devs to understand raw apis and data flow because there's no luxury of dedicated specs. it's less about writing production code and more about not being a bottleneck."
     else:
-        return "most early teams don't even push these to public boards anymore because of applicant noise. what actually works is finding active unlisted ashby endpoints directly, shoot me a dm if you want the raw list."
+        return "SKIP"
 
 def send_telegram_alert(project_key, project_data, opp, draft):
     p_name = project_data.get("name", project_key.upper())
@@ -334,6 +348,9 @@ def run_hunter_for_project(project_key, project_data):
             
         print(f"  🎯 Found: {opp['title'][:70]}...")
         draft = draft_ai_response(project_key, project_data, opp)
+        if draft.strip().upper() == "SKIP":
+            print(f"  ⏭️ Skipped irrelevant thread: {opp['title'][:50]}...")
+            continue
         
         # 1. Send push to Telegram
         sent = send_telegram_alert(project_key, project_data, opp, draft)
