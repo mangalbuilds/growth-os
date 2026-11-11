@@ -80,15 +80,20 @@ def search_reddit_opportunities(project_key, project_data, limit=4):
     opportunities = []
     seen_ids = set()
     
-    # Generate focused search queries to catch fresh discussions naturally
-    queries = []
-    for sub in subreddits[:3]:
-        for kw in keywords[:2]:
-            queries.append(f'site:reddit.com/{sub.strip()} {kw}')
+    # Generate focused search queries rotating across subreddits & keywords
+    import random
+    all_queries = []
+    for sub in subreddits:
+        for kw in keywords:
+            all_queries.append(f'site:reddit.com/{sub.strip()} {kw}')
+    
+    # Shuffle so every manual or cron run scans fresh combinations!
+    random.shuffle(all_queries)
+    queries = all_queries
     
     url = "https://google.serper.dev/search"
     
-    for q in queries[:3]:
+    for q in queries[:5]:
         if len(opportunities) >= limit:
             break
             
