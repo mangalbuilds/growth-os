@@ -121,7 +121,21 @@ def search_reddit_opportunities(project_key, project_data, limit=4):
                             
                         if t_id not in seen_ids:
                             seen_ids.add(t_id)
-                            opportunities.append({
+                            # Negative intent filtering to prevent interview/salary mismatch
+                        title_lower = r.get("title", "").lower()
+                        snippet_lower = r.get("snippet", "").lower()
+                        combined_text = f"{title_lower} {snippet_lower}"
+                        
+                        negative_intents = [
+                            "final round", "interview prep", "salary negotiation",
+                            "leetcode", "technical interview", "behavioral interview",
+                            "failed interview", "got rejected after final"
+                        ]
+                        
+                        if any(neg in combined_text for neg in negative_intents):
+                            continue
+                            
+                        opportunities.append({
                                 "thread_id": t_id,
                                 "title": r.get("title", ""),
                                 "url": link,
@@ -137,7 +151,7 @@ def search_reddit_opportunities(project_key, project_data, limit=4):
             
     return opportunities[:limit]
 
-def draft_ai_response(project_data, opp):
+def draft_ai_response(project_key, project_data, opp):
     p_name = project_data.get("name", "TrackKaro")
     one_liner = project_data.get("one_liner", "")
     disclosure = project_data.get("disclosure", "")
@@ -167,7 +181,13 @@ Draft the response only:"""
             res = json.loads(resp.read().decode())
             return res["candidates"][0]["content"]["parts"][0]["text"].strip()
     except Exception as e:
-        return f"I ran into this exact workflow challenge recently. What worked for us was setting up a streamlined webhook bridge with immediate dispatch. ({disclosure})"
+        # Dynamic context-aware authentic fallback per project
+        if project_key in ['prex', 'getprex']:
+            return f"Applying through massive job aggregators is brutal right now with automated ATS keyword filters. What consistently helped me get replies was skipping LinkedIn, finding the startup's direct unlisted Ashby or Greenhouse job board URL, and reaching out to the team with a short proof-of-work breakdown before the listing gets flooded. ({disclosure})"
+        elif project_key in ['vance', 'usevance', 'jarvis']:
+            return f"Cold email deliverability is night and day once you switch from cold bulk blasts to signal-based triggers. What solved it for us was waiting for actual buying intent triggers (hiring surges, tech churn) and keeping reply volumes under 35 per mailbox with strict SPF/DKIM/DMARC alignment. ({disclosure})"
+        else:
+            return f"I ran into this exact challenge recently. What worked for us was tightening the workflow and eliminating manual handoffs with real-time signal triggers. ({disclosure})"
 
 def send_telegram_alert(project_key, project_data, opp, draft):
     p_name = project_data.get("name", project_key.upper())
@@ -282,7 +302,7 @@ def run_hunter_for_project(project_key, project_data):
             continue
             
         print(f"  🎯 Found: {opp['title'][:70]}...")
-        draft = draft_ai_response(project_data, opp)
+        draft = draft_ai_response(project_key, project_data, opp)
         
         # 1. Send push to Telegram
         sent = send_telegram_alert(project_key, project_data, opp, draft)
