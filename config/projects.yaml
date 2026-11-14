@@ -3,6 +3,7 @@
 
 projects:
   trackkaro:
+    enabled: false  # Paused
     name: "TrackKaro AI"
     category: "B2B Speed-to-Lead & Inbound Automation"
     url: "https://trackkaroai.com"
@@ -49,6 +50,7 @@ projects:
     disclosure: "Full disclosure: I built and run usevance.com to automate intent-based outbound and replace static list spraying."
 
   jarvis:
+    enabled: false  # Paused
     name: "Vance AI SDR (Jarvis)"
     category: "Autonomous B2B Outbound Engine"
     url: "https://vance.trackkaroai.com"
@@ -146,6 +148,7 @@ projects:
     disclosure: "Full disclosure, I built an open-source copilot using Gemini + Google Sheets + Telegram to avoid mindlessly scrolling job boards."
 
   ai_video_wan:
+    enabled: false  # Paused
     name: "Wan2.1 AI Video Engine"
     category: "Open Source AI Video Generation"
     one_liner: "State-of-the-art open-source 1.3B/14B text-to-video generation running on consumer hardware and Colab T4 GPUs with 4-bit quantization."
@@ -163,6 +166,7 @@ projects:
     disclosure: "I maintain an optimized setup for Wan2.1 to prevent Colab T4 RAM/VRAM crashes."
 
   ughar:
+    enabled: false  # Paused
     name: "UGhar"
     category: "Zero-Broker Rental & 60s Dispatch"
     one_liner: "Instant 60-second dispatch connecting verified tenants directly to property owners without middleman broker fees."
